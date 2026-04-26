@@ -104,9 +104,12 @@
   .car-card:hover .img-edit-btn { display: flex; }
   .img-edit-btn:hover { color: var(--text); border-color: var(--muted); }
 
-  .car-body { padding: 0.9rem 1rem; }
+  .car-body { padding: 0.9rem 1rem; position: relative; }
   .car-make { font-size: 0.72rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
   .car-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.6rem; }
+  .brand-logo { position: absolute; top: 0.75rem; right: 0.85rem; width: 36px; height: 36px; object-fit: contain; opacity: 0.55; filter: grayscale(0.2); transition: opacity 0.2s; }
+  .car-card:hover .brand-logo { opacity: 0.85; }
+  .brand-logo-list { width: 26px; height: 26px; object-fit: contain; opacity: 0.5; flex-shrink: 0; }
   .car-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.8rem; }
   .tag { font-size: 0.7rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); color: var(--muted); background: transparent; }
   .tag-country { border-color: rgba(100,100,120,0.4);}
@@ -457,7 +460,11 @@
 </div>
 
 <script>
-let cars = JSON.parse(localStorage.getItem('gt7_cars') || '[]');
+const SUPABASE_URL = 'https://nspwapqjphuzqwlqdfnj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zcHdhcHFqcGh1enF3bHFkZm5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzI3NjEsImV4cCI6MjA5Mjc0ODc2MX0.xicZWCTkJIPKLXfVzLrmP4n20xboufMwcjRldMM0E5c';
+const SB_HEADERS = { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
+
+let cars = [];
 let editId = null;
 let activeCategory = null;
 let activeCountry = null;
@@ -471,7 +478,65 @@ let ownedFilter = 'all';
 let currentImgBase64 = null;
 const TOTAL_GT7 = 570;
 
-function save() { localStorage.setItem('gt7_cars', JSON.stringify(cars)); }
+function showToast(msg, type='info') {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:0.5rem 1.2rem;border-radius:8px;font-family:Barlow Condensed,sans-serif;font-size:0.9rem;z-index:9999;transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.borderColor = type==='error' ? 'var(--accent2)' : type==='ok' ? 'var(--accent)' : 'var(--border)';
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+async function loadFromSupabase() {
+  showToast('⏳ Chargement du garage…');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/cars?select=id,data&order=id.asc`, { headers: SB_HEADERS });
+    if (!res.ok) throw new Error(await res.text());
+    const rows = await res.json();
+    cars = rows.map(r => ({ id: r.id, ...r.data }));
+    showToast('✓ Garage chargé', 'ok');
+  } catch(e) {
+    showToast('❌ Erreur de connexion à Supabase', 'error');
+    console.error(e);
+    cars = [];
+  }
+  render();
+}
+
+async function save() {
+  // Upsert toutes les voitures (insert or update)
+  const payload = cars.map(c => ({ id: c.id, data: (({id, ...rest}) => rest)(c) }));
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/cars`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(await res.text());
+  } catch(e) {
+    showToast('❌ Erreur de sauvegarde', 'error');
+    console.error(e);
+  }
+}
+
+async function deleteFromSupabase(id) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/cars?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: SB_HEADERS
+    });
+    if (!res.ok) throw new Error(await res.text());
+  } catch(e) {
+    showToast('❌ Erreur suppression', 'error');
+    console.error(e);
+  }
+}
 
 function setView(v) {
   currentView = v;
@@ -549,6 +614,47 @@ function render() {
   container.innerHTML = currentView==='grid'
     ? `<div class="cars-grid">${list.map(cardHTML).join('')}</div>`
     : `<div class="cars-list">${list.map(listHTML).join('')}</div>`;
+}
+
+// Mapping marque -> slug pour car-logos.org
+const BRAND_SLUGS = {
+  'acura':'acura','alfa romeo':'alfa-romeo','alpina':'alpina','alpine':'alpine',
+  'aston martin':'aston-martin','audi':'audi','bentley':'bentley','bmw':'bmw',
+  'bugatti':'bugatti','buick':'buick','cadillac':'cadillac','chevrolet':'chevrolet',
+  'chrysler':'chrysler','citroën':'citroen','citroen':'citroen','corvette':'chevrolet',
+  'datsun':'datsun','dodge':'dodge','ferrari':'ferrari','fiat':'fiat','ford':'ford',
+  'genesis':'genesis','honda':'honda','hummer':'hummer','hyundai':'hyundai',
+  'infiniti':'infiniti','jaguar':'jaguar','jeep':'jeep','kia':'kia',
+  'koenigsegg':'koenigsegg','lamborghini':'lamborghini','lancia':'lancia',
+  'land rover':'land-rover','lexus':'lexus','lincoln':'lincoln','lotus':'lotus',
+  'maserati':'maserati','mazda':'mazda','mclaren':'mclaren','mercedes':'mercedes-benz',
+  'mercedes-benz':'mercedes-benz','mini':'mini','mitsubishi':'mitsubishi',
+  'nissan':'nissan','opel':'opel','pagani':'pagani','peugeot':'peugeot',
+  'pontiac':'pontiac','porsche':'porsche','ram':'ram','renault':'renault',
+  'rolls-royce':'rolls-royce','saab':'saab','seat':'seat','skoda':'skoda',
+  'subaru':'subaru','suzuki':'suzuki','tesla':'tesla','toyota':'toyota',
+  'vauxhall':'vauxhall','volkswagen':'volkswagen','volvo':'volvo',
+  'shelby':'shelby','bugatti':'bugatti','de tomaso':'de-tomaso',
+  'group b':'','gr':'','tomahawk':'','chaparral':'','vision':'',
+};
+
+function getBrandLogoUrl(make) {
+  if (!make) return null;
+  const key = make.toLowerCase().trim();
+  const slug = BRAND_SLUGS[key];
+  if (slug === undefined) {
+    // Tentative directe avec le nom normalisé
+    const auto = key.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    return `https://www.carlogos.org/car-logos/${auto}-logo.png`;
+  }
+  if (!slug) return null;
+  return `https://www.carlogos.org/car-logos/${slug}-logo.png`;
+}
+
+function logoImgTag(make, cls='brand-logo') {
+  const url = getBrandLogoUrl(make);
+  if (!url) return '';
+  return `<img src="${url}" alt="${make}" class="${cls}" onerror="this.style.display='none'">`;
 }
 
 function cardHTML(c) {
@@ -709,18 +815,20 @@ function filterTrans(tr) { activeTrans=tr; render(); }
 function filterYear(ye) { activeYear=ye; render(); }
 function filterPP(pp) { activePP=pp; render(); }
 
-function toggleOwned(id) {
+async function toggleOwned(id) {
   const idx=cars.findIndex(c=>c.id===id);
   if(idx===-1)return;
   cars[idx].owned=cars[idx].owned===false?true:false;
-  save(); render();
+  render();
+  await save();
 }
 
-function toggleWish(id) {
+async function toggleWish(id) {
   const idx=cars.findIndex(c=>c.id===id);
   if(idx===-1)return;
   cars[idx].wished=!cars[idx].wished;
-  save(); render();
+  render();
+  await save();
 }
 
 function filterMake(mk) { activeMake=mk; render(); }
@@ -805,7 +913,7 @@ function closeModal(e) {
     document.getElementById('modal-bg').classList.remove('open');
 }
 
-function saveCar() {
+async function saveCar() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { document.getElementById('f-name').focus(); return; }
   let emojiToSave = '🚗'; 
@@ -835,17 +943,25 @@ function saveCar() {
   } else {
     data.id = Date.now();
     data.owned = true;
+    data.wished = false;
     cars.push(data);
   }
-  save(); closeModal(); render();
+  closeModal();
+  showToast('💾 Sauvegarde…');
+  await save();
+  showToast('✓ Voiture enregistrée', 'ok');
+  render();
 }
 
 function editCar(id) { openModal(id); }
 
-function deleteCar(id) {
+async function deleteCar(id) {
   if (!confirm('Supprimer cette voiture du garage ?')) return;
   cars = cars.filter(c=>c.id!==id);
-  save(); render();
+  showToast('🗑️ Suppression…');
+  await deleteFromSupabase(id);
+  showToast('✓ Voiture supprimée', 'ok');
+  render();
 }
 
 /* LIGHTBOX */
@@ -859,13 +975,9 @@ function openLightbox(id) {
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener('keydown', e => { if(e.key==='Escape') { closeLightbox(); closeModal(); } });
 
-if (cars.length===0) {
-  cars = [
-    {id:1,make:'Exemple',name:'Exemple',year:1999,pp:0,price:0,country:'🇯🇵 Japon',cat:'Routière',rarity:'normal',emoji:'🚗',note:'Exemple',owned:true,img:null},
-  ];
-  save();
-}
-render();
+/* INIT */
+loadFromSupabase();
+
 </script>
 </body>
 </html>
