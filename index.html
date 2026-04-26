@@ -198,6 +198,95 @@
   .lightbox.open { opacity: 1; pointer-events: all; }
   .lightbox-img-wrap { max-width: 90vw; max-height: 80vh; }
   .lightbox-img-wrap img { max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: 8px; display: block; }
+
+  /* ===================== MOBILE ===================== */
+  @media (max-width: 768px) {
+
+    /* HEADER mobile */
+    header { padding: 0 1rem; height: 56px; gap: 0.75rem; }
+    .logo { font-size: 1.2rem; }
+    .header-stats { display: none; }
+    .btn-add { padding: 0.45rem 0.9rem; font-size: 0.85rem; }
+
+    /* LAYOUT : sidebar cachée, main plein écran */
+    .layout { grid-template-columns: 1fr; height: calc(100vh - 56px); }
+    aside { display: none; }
+    main { padding: 1rem; padding-bottom: 5rem; }
+
+    /* GRILLE : 1 colonne */
+    .cars-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+
+    /* TUILE mobile : rangée horizontale compacte */
+    .car-card { display: flex; flex-direction: row; border-radius: 10px; min-height: 90px; }
+    .car-img-wrap { width: 100px; min-width: 100px; height: auto; border-radius: 10px 0 0 10px; flex-shrink: 0; }
+    .car-img-wrap::after { display: none; }
+    .car-body { flex: 1; padding: 0.65rem 0.75rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; position: relative; }
+    .brand-logo { width: 40px; height: 40px; top: 0.4rem; right: 0.5rem; }
+    .car-make { font-size: 0.65rem; padding-right: 48px; }
+    .car-name { font-size: 1rem; margin-bottom: 0.35rem; padding-right: 48px; }
+    .car-tags { gap: 0.25rem; margin-bottom: 0.4rem; flex-wrap: nowrap; overflow: hidden; }
+    .tag { font-size: 0.6rem; padding: 1px 5px; white-space: nowrap; }
+    .car-stats { gap: 0.5rem; padding-top: 0.4rem; }
+    .cs-val { font-size: 0.9rem; }
+    .cs-key { font-size: 0.55rem; }
+
+    /* Boutons toujours visibles sur mobile (pas de hover) */
+    .card-actions { display: flex; bottom: 0.5rem; right: 0.5rem; }
+    .img-edit-btn { display: flex; }
+    .owned-toggle { width: 28px; height: 28px; font-size: 0.75rem; }
+    .wish-btn { top: 2.4rem; width: 28px; height: 28px; font-size: 0.8rem; }
+    .wish-banner { display: none !important; }
+    .action-btn { width: 30px; height: 30px; font-size: 0.8rem; }
+
+    /* TOOLBAR mobile */
+    .toolbar { margin-bottom: 0.75rem; gap: 0.5rem; }
+    .sort-wrap label { display: none; }
+    .sort-wrap select { font-size: 0.8rem; padding: 0.35rem 0.5rem; }
+
+    /* LISTE mobile */
+    .list-row { padding: 0.6rem 0.75rem; gap: 0.6rem; }
+    .list-thumb { width: 48px; height: 32px; }
+    .list-stats { gap: 0.75rem; }
+    .ls-val { font-size: 0.85rem; }
+    .list-actions { gap: 0.25rem; }
+    .list-actions .action-btn { width: 30px; height: 30px; }
+
+    /* MODAL plein écran */
+    .modal-bg { padding: 0; align-items: flex-end; }
+    .modal { border-radius: 16px 16px 0 0; max-width: 100%; padding: 1.25rem 1rem 2rem; transform: translateY(100%); max-height: 92vh; overflow-y: auto; }
+    .modal-bg.open .modal { transform: translateY(0); }
+    .modal h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+    .form-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .form-field input, .form-field select { font-size: 1rem; padding: 0.6rem 0.7rem; }
+    .img-upload-inner { padding: 1rem; }
+    .img-overlay-btn { opacity: 1; transform: none; }
+
+    /* PANNEAU FILTRES (drawer) */
+    .filter-drawer { position: fixed; inset: 0; z-index: 150; pointer-events: none; }
+    .filter-drawer-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.25s; }
+    .filter-drawer-panel { position: absolute; left: 0; top: 0; bottom: 0; width: 280px; background: var(--bg2); border-right: 1px solid var(--border); padding: 1.25rem 1rem 2rem; display: flex; flex-direction: column; gap: 1.25rem; overflow-y: auto; transform: translateX(-100%); transition: transform 0.25s ease; }
+    .filter-drawer.open { pointer-events: all; }
+    .filter-drawer.open .filter-drawer-overlay { opacity: 1; }
+    .filter-drawer.open .filter-drawer-panel { transform: translateX(0); }
+    .drawer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.25rem; }
+    .drawer-header h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .drawer-close { background: transparent; border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+
+    /* BARRE NAVIGATION BAS */
+    .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 100; height: 56px; }
+    .mobile-nav-btn { flex: 1; background: transparent; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.15s; }
+    .mobile-nav-btn .nav-icon { font-size: 1.3rem; line-height: 1; }
+    .mobile-nav-btn.active { color: var(--accent); }
+    .mobile-nav-btn:active { transform: scale(0.92); }
+  }
+
+  /* Masquer la nav mobile sur desktop */
+  .mobile-nav { display: none; }
+  .filter-drawer { display: none; }
+  @media (max-width: 768px) {
+    .mobile-nav { display: flex; }
+    .filter-drawer { display: block; }
+  }
   .lightbox-name { margin-top: 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 0.1em; text-transform: uppercase; }
   .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
   .lightbox-close:hover { background: rgba(255,255,255,0.2); }
@@ -459,6 +548,63 @@
   <div class="lightbox-name" id="lightbox-name"></div>
 </div>
 
+<!-- FILTER DRAWER (mobile) -->
+<div class="filter-drawer" id="filter-drawer">
+  <div class="filter-drawer-overlay" onclick="closeDrawer()"></div>
+  <div class="filter-drawer-panel">
+    <div class="drawer-header">
+      <h2>Filtres</h2>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="sidebar-section">
+      <h3>Statut</h3>
+      <div class="owned-filter">
+        <button id="m-filter-all-btn" class="active" onclick="filterOwned('all')">Toutes</button>
+        <button id="m-filter-owned-btn" onclick="filterOwned('owned')">✓ Obtenues</button>
+        <button id="m-filter-notowned-btn" onclick="filterOwned('missing')">○ Manquantes</button>
+      </div>
+      <div class="owned-filter" style="margin-top:4px;">
+        <button id="m-filter-wish-btn" onclick="filterOwned('wishlist')" style="flex:1;">⭐ Wishlist</button>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Recherche</h3>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="m-search-input" placeholder="Nom, marque…" oninput="onMobileSearch()">
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Marque</h3>
+      <div id="m-make-filters"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Catégorie</h3>
+      <div id="m-cat-filters"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Pays</h3>
+      <div id="m-country-filters"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BARRE NAV MOBILE -->
+<nav class="mobile-nav">
+  <button class="mobile-nav-btn active" id="nav-garage" onclick="mobileNav('garage')">
+    <span class="nav-icon">🏎️</span>Garage
+  </button>
+  <button class="mobile-nav-btn" id="nav-wish" onclick="mobileNav('wish')">
+    <span class="nav-icon">⭐</span>Wishlist
+  </button>
+  <button class="mobile-nav-btn" id="nav-add" onclick="openModal()">
+    <span class="nav-icon">＋</span>Ajouter
+  </button>
+  <button class="mobile-nav-btn" id="nav-filter" onclick="openDrawer()">
+    <span class="nav-icon">⚙️</span>Filtres
+  </button>
+</nav>
+
 <script>
 const SUPABASE_URL = 'https://nspwapqjphuzqwlqdfnj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zcHdhcHFqcGh1enF3bHFkZm5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzI3NjEsImV4cCI6MjA5Mjc0ODc2MX0.xicZWCTkJIPKLXfVzLrmP4n20xboufMwcjRldMM0E5c';
@@ -545,12 +691,42 @@ function setView(v) {
   render();
 }
 
+function openDrawer() { document.getElementById('filter-drawer').classList.add('open'); }
+function closeDrawer() { document.getElementById('filter-drawer').classList.remove('open'); }
+
+function onMobileSearch() {
+  const val = document.getElementById('m-search-input').value;
+  document.getElementById('search-input').value = val;
+  render();
+}
+
+function mobileNav(tab) {
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-' + tab).classList.add('active');
+  if (tab === 'wish') filterOwned('wishlist');
+  else if (tab === 'garage') filterOwned('all');
+}
+
 function filterOwned(mode) {
   ownedFilter = mode;
-  document.getElementById('filter-all-btn').classList.toggle('active', mode==='all');
-  document.getElementById('filter-owned-btn').classList.toggle('active', mode==='owned');
-  document.getElementById('filter-notowned-btn').classList.toggle('active', mode==='missing');
-  document.getElementById('filter-wish-btn').classList.toggle('active', mode==='wishlist');
+  // Desktop buttons
+  const da = document.getElementById('filter-all-btn');
+  const do_ = document.getElementById('filter-owned-btn');
+  const dn = document.getElementById('filter-notowned-btn');
+  const dw = document.getElementById('filter-wish-btn');
+  if(da) da.classList.toggle('active', mode==='all');
+  if(do_) do_.classList.toggle('active', mode==='owned');
+  if(dn) dn.classList.toggle('active', mode==='missing');
+  if(dw) dw.classList.toggle('active', mode==='wishlist');
+  // Mobile buttons
+  const ma = document.getElementById('m-filter-all-btn');
+  const mo = document.getElementById('m-filter-owned-btn');
+  const mn = document.getElementById('m-filter-notowned-btn');
+  const mw = document.getElementById('m-filter-wish-btn');
+  if(ma) ma.classList.toggle('active', mode==='all');
+  if(mo) mo.classList.toggle('active', mode==='owned');
+  if(mn) mn.classList.toggle('active', mode==='missing');
+  if(mw) mw.classList.toggle('active', mode==='wishlist');
   render();
 }
 
@@ -730,18 +906,6 @@ function renderFilters() {
     'special': 'Voitures d\'Occasion',
     'normal': 'Brand Central'
   };
-  const cats = {};
-  cars.forEach(c=>{ if(c.cat) cats[c.cat]=(cats[c.cat]||0)+1; });
-  document.getElementById('cat-filters').innerHTML =
-    `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">Toutes <span class="count">${cars.length}</span></button>`+
-    Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>
-      `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${cat} <span class="count">${n}</span></button>`).join('');
-  const countries={};
-  cars.forEach(c=>{ if(c.country) countries[c.country]=(countries[c.country]||0)+1; });
-  document.getElementById('country-filters').innerHTML =
-    `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">Tous <span class="count">${cars.length}</span></button>`+
-    Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>
-      `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${ct} <span class="count">${n}</span></button>`).join('');
   const rarities={};
   cars.forEach(c=>{ if(c.rarity) rarities[c.rarity]=(rarities[c.rarity]||0)+1; });
   document.getElementById('rarity-filters').innerHTML =
@@ -778,14 +942,43 @@ function renderFilters() {
       return `<button class="filter-btn ${activePP == pp ? 'active' : ''}" onclick="filterPP(${pp})">${label} <span class="count">${n}</span></button>`;}).join('');
   const makes2={};
   cars.forEach(c=>{ if(c.make) makes2[c.make]=(makes2[c.make]||0)+1; });
-  const makeEl = document.getElementById('make-filters');
-  makeEl.innerHTML =
-    `<button class="filter-btn ${!activeMake?'active':''}" data-make="">Toutes <span class="count">${cars.length}</span></button>`+
-    Object.entries(makes2).sort((a,b)=>a[0].localeCompare(b[0])).map(([mk,n])=>
-      `<button class="filter-btn ${activeMake===mk?'active':''}" data-make="${mk.replace(/"/g,'&quot;')}">${mk} <span class="count">${n}</span></button>`).join('');
-  makeEl.querySelectorAll('[data-make]').forEach(btn => {
-    btn.addEventListener('click', () => { activeMake = btn.dataset.make || null; render(); });
-  });
+  function makeMakeHTML(prefix) {
+    const el = document.getElementById(prefix+'make-filters');
+    if (!el) return;
+    el.innerHTML =
+      `<button class="filter-btn ${!activeMake?'active':''}" data-make="">Toutes <span class="count">${cars.length}</span></button>`+
+      Object.entries(makes2).sort((a,b)=>a[0].localeCompare(b[0])).map(([mk,n])=>
+        `<button class="filter-btn ${activeMake===mk?'active':''}" data-make="${mk.replace(/"/g,'&quot;')}">${mk} <span class="count">${n}</span></button>`).join('');
+    el.querySelectorAll('[data-make]').forEach(btn => {
+      btn.addEventListener('click', () => { activeMake = btn.dataset.make || null; render(); });
+    });
+  }
+  makeMakeHTML(''); makeMakeHTML('m-');
+
+  function makeCatHTML(prefix) {
+    const cats={};
+    cars.forEach(c=>{ if(c.cat) cats[c.cat]=(cats[c.cat]||0)+1; });
+    const el = document.getElementById(prefix+'cat-filters');
+    if (!el) return;
+    el.innerHTML =
+      `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">Toutes <span class="count">${cars.length}</span></button>`+
+      Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>
+        `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${cat} <span class="count">${n}</span></button>`).join('');
+  }
+  makeCatHTML(''); makeCatHTML('m-');
+
+  function makeCountryHTML(prefix) {
+    const countries={};
+    cars.forEach(c=>{ if(c.country) countries[c.country]=(countries[c.country]||0)+1; });
+    const el = document.getElementById(prefix+'country-filters');
+    if (!el) return;
+    el.innerHTML =
+      `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">Tous <span class="count">${cars.length}</span></button>`+
+      Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>
+        `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${ct} <span class="count">${n}</span></button>`).join('');
+  }
+  makeCountryHTML(''); makeCountryHTML('m-');
+
   const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
   document.getElementById('makes-list').innerHTML = makes.map(m=>`<option value="${m}">`).join('');
 }
