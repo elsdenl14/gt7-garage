@@ -107,7 +107,7 @@
   .car-body { padding: 0.9rem 1rem; position: relative; }
   .car-make { font-size: 0.72rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
   .car-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.6rem; }
-  .brand-logo { position: absolute; top: 0.1rem; right: 0.3rem; width: 78px; height: 78px; object-fit: contain; opacity: 0.55; filter: grayscale(0.2); transition: opacity 0.2s; }
+  .brand-logo { position: absolute; top: -0.3rem; right: 0.3rem; width: 78px; height: 78px; object-fit: contain; opacity: 0.55; filter: grayscale(0.2); transition: opacity 0.2s; }
   .car-card:hover .brand-logo { opacity: 0.85; }
   .brand-logo-list { width: 40px; height: 40px; object-fit: contain; opacity: 0.5; flex-shrink: 0; }
   .car-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.8rem; }
@@ -211,47 +211,80 @@
     /* LAYOUT : sidebar cachée, main plein écran */
     .layout { grid-template-columns: 1fr; height: calc(100vh - 56px); }
     aside { display: none; }
-    main { padding: 1rem; padding-bottom: 5rem; }
+    main { padding: 0.75rem; padding-bottom: 5rem; }
+
+    /* Masquer vue liste sur mobile */
+    .view-toggle { display: none; }
 
     /* GRILLE : 1 colonne */
-    .cars-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+    .cars-grid { grid-template-columns: 1fr; gap: 0.6rem; }
 
     /* TUILE mobile : rangée horizontale compacte */
-    .car-card { display: flex; flex-direction: row; border-radius: 10px; min-height: 90px; }
-    .car-img-wrap { width: 100px; min-width: 100px; height: auto; border-radius: 10px 0 0 10px; flex-shrink: 0; }
-    .car-img-wrap::after { display: none; }
-    .car-body { flex: 1; padding: 0.65rem 0.75rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; position: relative; }
-    .brand-logo { width: 40px; height: 40px; top: 0.4rem; right: 0.5rem; }
-    .car-make { font-size: 0.65rem; padding-right: 48px; }
-    .car-name { font-size: 1rem; margin-bottom: 0.35rem; padding-right: 48px; }
-    .car-tags { gap: 0.25rem; margin-bottom: 0.4rem; flex-wrap: nowrap; overflow: hidden; }
-    .tag { font-size: 0.6rem; padding: 1px 5px; white-space: nowrap; }
-    .car-stats { gap: 0.5rem; padding-top: 0.4rem; }
-    .cs-val { font-size: 0.9rem; }
-    .cs-key { font-size: 0.55rem; }
+    .car-card { display: flex; flex-direction: row; border-radius: 10px; min-height: 80px; overflow: hidden; }
 
-    /* Boutons toujours visibles sur mobile (pas de hover) */
-    .card-actions { display: flex; bottom: 0.5rem; right: 0.5rem; }
-    .img-edit-btn { display: flex; }
-    .owned-toggle { width: 28px; height: 28px; font-size: 0.75rem; }
-    .wish-btn { top: 2.4rem; width: 28px; height: 28px; font-size: 0.8rem; }
+    /* Image plus petite */
+    .car-img-wrap { width: 80px; min-width: 80px; height: auto; border-radius: 10px 0 0 10px; flex-shrink: 0; font-size: 2rem; }
+    .car-img-wrap::after { display: none; }
+
+    /* Corps de la tuile */
+    .car-body { flex: 1; padding: 0.5rem 0.6rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; position: relative; padding-right: 52px; }
+
+    /* Logo marque plus petit, plus haut */
+    .brand-logo { width: 34px; height: 34px; top: 0.3rem; right: 0.4rem; opacity: 0.6; }
+
+    /* Textes */
+    .car-make { font-size: 0.6rem; }
+    .car-name { font-size: 0.88rem; margin-bottom: 0.25rem; }
+
+    /* Tags : une seule ligne, pas de wrap */
+    .car-tags { gap: 0.2rem; margin-bottom: 0.3rem; flex-wrap: nowrap; overflow: hidden; }
+    .tag { font-size: 0.55rem; padding: 1px 4px; white-space: nowrap; }
+
+    /* Stats */
+    .car-stats { gap: 0.4rem; padding-top: 0.3rem; }
+    .cs-val { font-size: 0.82rem; }
+    .cs-key { font-size: 0.5rem; }
+
+    /* Rareté : très compacte sur mobile */
+    .car-rarity { font-size: 0.52rem; padding: 1px 5px; letter-spacing: 0.06em; top: 0.35rem; right: 0.35rem; }
+
+    /* Boutons owned + wish : déplacés à droite, sous le logo, petits */
+    .owned-toggle {
+      position: absolute;
+      bottom: 0.35rem;
+      right: 0.35rem;
+      top: auto;
+      left: auto;
+      width: 20px;
+      height: 20px;
+      font-size: 0.6rem;
+      border-width: 1px;
+    }
+    .wish-btn {
+      position: absolute;
+      bottom: 0.35rem;
+      right: 1.85rem;
+      top: auto;
+      left: auto;
+      width: 20px;
+      height: 20px;
+      font-size: 0.62rem;
+      border-width: 1px;
+      border-radius: 50%;
+    }
     .wish-banner { display: none !important; }
-    .action-btn { width: 30px; height: 30px; font-size: 0.8rem; }
+
+    /* Boutons edit/delete : petits, toujours visibles */
+    .card-actions { display: flex; top: 0.35rem; bottom: auto; right: auto; left: 0.35rem; gap: 0.25rem; }
+    .img-edit-btn { display: none; }
+    .action-btn { width: 22px; height: 22px; font-size: 0.65rem; }
 
     /* TOOLBAR mobile */
-    .toolbar { margin-bottom: 0.75rem; gap: 0.5rem; }
+    .toolbar { margin-bottom: 0.6rem; gap: 0.5rem; }
     .sort-wrap label { display: none; }
     .sort-wrap select { font-size: 0.8rem; padding: 0.35rem 0.5rem; }
 
-    /* LISTE mobile */
-    .list-row { padding: 0.6rem 0.75rem; gap: 0.6rem; }
-    .list-thumb { width: 48px; height: 32px; }
-    .list-stats { gap: 0.75rem; }
-    .ls-val { font-size: 0.85rem; }
-    .list-actions { gap: 0.25rem; }
-    .list-actions .action-btn { width: 30px; height: 30px; }
-
-    /* MODAL plein écran */
+    /* MODAL plein écran depuis le bas */
     .modal-bg { padding: 0; align-items: flex-end; }
     .modal { border-radius: 16px 16px 0 0; max-width: 100%; padding: 1.25rem 1rem 2rem; transform: translateY(100%); max-height: 92vh; overflow-y: auto; }
     .modal-bg.open .modal { transform: translateY(0); }
@@ -479,23 +512,15 @@
         <input type="number" id="f-weight" placeholder="1000" min="300" max="5000">
       </div>
 
-      <!-- Ligne 5 : Pays + Catégorie -->
+      <!-- Ligne 5 : Aspiration + Catégorie -->
       <div class="form-field">
-        <label>Pays</label>
-        <select id="f-country">
+        <label>Aspiration</label>
+        <select id="f-aspiration">
           <option value="">— Sélectionner —</option>
-          <option value="🇩🇪 Allemagne">🇩🇪 Allemagne</option>
-          <option value="🇦🇹 Autriche">🇦🇹 Autriche</option>
-          <option value="🇨🇳 Chine">🇨🇳 Chine</option>
-          <option value="🇰🇷 Corée du Sud">🇰🇷 Corée du Sud</option>
-          <option value="🇫🇷 France">🇫🇷 France</option>
-          <option value="🇮🇹 Italie">🇮🇹 Italie</option>
-          <option value="🇯🇵 Japon">🇯🇵 Japon</option>
-          <option value="🇬🇧 Royaume-Uni">🇬🇧 Royaume-Uni</option>
-          <option value="🇨🇿 République Tchèque">🇨🇿 République Tchèque</option>
-          <option value="🇸🇪 Suède">🇸🇪 Suède</option>
-          <option value="🇺🇸 États-Unis">🇺🇸 États-Unis</option>
-          <option value="🌍 Autre">🌍 Autre</option>
+          <option value="NA">NA (Atmosphérique)</option>
+          <option value="TC">TC (Turbo)</option>
+          <option value="SC">SC (Compresseur)</option>
+          <option value="VE">VE (Électrique)</option>
         </select>
       </div>
       <div class="form-field">
@@ -685,6 +710,8 @@ async function deleteFromSupabase(id) {
 }
 
 function setView(v) {
+  // Forcer grille sur mobile
+  if (window.innerWidth <= 768) v = 'grid';
   currentView = v;
   document.getElementById('grid-btn').classList.toggle('active', v==='grid');
   document.getElementById('list-btn').classList.toggle('active', v==='list');
@@ -792,6 +819,56 @@ function render() {
     : `<div class="cars-list">${list.map(listHTML).join('')}</div>`;
 }
 
+// Correspondance automatique marque → pays
+const MAKE_TO_COUNTRY = {
+  // Japon
+  'acura':'🇯🇵 Japon','daihatsu':'🇯🇵 Japon','honda':'🇯🇵 Japon','infiniti':'🇯🇵 Japon',
+  'isuzu':'🇯🇵 Japon','lexus':'🇯🇵 Japon','mazda':'🇯🇵 Japon','mitsubishi':'🇯🇵 Japon',
+  'nissan':'🇯🇵 Japon','subaru':'🇯🇵 Japon','suzuki':'🇯🇵 Japon','toyota':'🇯🇵 Japon',
+  'yamaha':'🇯🇵 Japon','nismo':'🇯🇵 Japon','supra':'🇯🇵 Japon',
+  // Allemagne
+  'audi':'🇩🇪 Allemagne','bmw':'🇩🇪 Allemagne','mercedes':'🇩🇪 Allemagne',
+  'mercedes-benz':'🇩🇪 Allemagne','opel':'🇩🇪 Allemagne','porsche':'🇩🇪 Allemagne',
+  'volkswagen':'🇩🇪 Allemagne','vw':'🇩🇪 Allemagne','amg':'🇩🇪 Allemagne',
+  'alpina':'🇩🇪 Allemagne','ruf':'🇩🇪 Allemagne',
+  // Italie
+  'alfa romeo':'🇮🇹 Italie','bugatti':'🇮🇹 Italie','de tomaso':'🇮🇹 Italie',
+  'ferrari':'🇮🇹 Italie','fiat':'🇮🇹 Italie','lamborghini':'🇮🇹 Italie',
+  'lancia':'🇮🇹 Italie','maserati':'🇮🇹 Italie','pagani':'🇮🇹 Italie',
+  'abarth':'🇮🇹 Italie','zagato':'🇮🇹 Italie',
+  // France
+  'alpine':'🇫🇷 France','citroen':'🇫🇷 France','citroën':'🇫🇷 France',
+  'ds':'🇫🇷 France','peugeot':'🇫🇷 France','renault':'🇫🇷 France',
+  'venturi':'🇫🇷 France',
+  // Royaume-Uni
+  'aston martin':'🇬🇧 Royaume-Uni','bac':'🇬🇧 Royaume-Uni','bentley':'🇬🇧 Royaume-Uni',
+  'caterham':'🇬🇧 Royaume-Uni','jaguar':'🇬🇧 Royaume-Uni','land rover':'🇬🇧 Royaume-Uni',
+  'lotus':'🇬🇧 Royaume-Uni','mclaren':'🇬🇧 Royaume-Uni','mg':'🇬🇧 Royaume-Uni',
+  'mini':'🇬🇧 Royaume-Uni','morgan':'🇬🇧 Royaume-Uni','rolls-royce':'🇬🇧 Royaume-Uni',
+  'tvr':'🇬🇧 Royaume-Uni',
+  // États-Unis
+  'buick':'🇺🇸 États-Unis','cadillac':'🇺🇸 États-Unis','chevrolet':'🇺🇸 États-Unis',
+  'chrysler':'🇺🇸 États-Unis','dodge':'🇺🇸 États-Unis','ford':'🇺🇸 États-Unis',
+  'jeep':'🇺🇸 États-Unis','lincoln':'🇺🇸 États-Unis','pontiac':'🇺🇸 États-Unis',
+  'ram':'🇺🇸 États-Unis','saleen':'🇺🇸 États-Unis','shelby':'🇺🇸 États-Unis',
+  'tesla':'🇺🇸 États-Unis','hennessey':'🇺🇸 États-Unis','ssc':'🇺🇸 États-Unis',
+  // Suède
+  'koenigsegg':'🇸🇪 Suède','saab':'🇸🇪 Suède','volvo':'🇸🇪 Suède',
+  // Corée du Sud
+  'genesis':'🇰🇷 Corée du Sud','hyundai':'🇰🇷 Corée du Sud','kia':'🇰🇷 Corée du Sud',
+  // République Tchèque
+  'skoda':'🇨🇿 République Tchèque','škoda':'🇨🇿 République Tchèque',
+  // Autriche
+  'ktm':'🇦🇹 Autriche',
+  // Chine
+  'byd':'🇨🇳 Chine','afeela':'🇨🇳 Chine','yangwang':'🇨🇳 Chine','xiaomi':'🇨🇳 Chine',
+};
+
+function getCountryFromMake(make) {
+  if (!make) return '';
+  return MAKE_TO_COUNTRY[make.toLowerCase().trim()] || '🌍 Autre';
+}
+
 // Logos locaux depuis le dossier logos/
 // Correspondances spéciales pour les noms qui diffèrent
 const BRAND_LOGO_OVERRIDES = {
@@ -840,6 +917,7 @@ function cardHTML(c) {
         ${c.cat?`<span class="tag tag-cat">${c.cat}</span>`:''}
         ${c.year?`<span class="tag tag-a">${c.year}</span>`:''}
         ${c.trans?`<span class="tag tag-b">${c.trans}</span>`:''}
+        ${c.aspiration?`<span class="tag" style="border-color:rgba(180,100,255,0.3);color:rgba(180,100,255,0.8);">${c.aspiration}</span>`:''}
       </div>
       <div class="car-stats">
         <div class="cs-item">
@@ -1063,21 +1141,21 @@ function openModal(id=null) {
     document.getElementById('f-year').value = c.year||'';
     document.getElementById('f-pp').value = c.pp||'';
     document.getElementById('f-price').value = c.price||'';
-    document.getElementById('f-country').value = c.country||'';
     document.getElementById('f-cat').value = c.cat||'';
     document.getElementById('f-rarity').value = c.rarity||'';
     document.getElementById('f-note').value = c.note||'';
     document.getElementById('f-trans').value = c.trans||'';
     document.getElementById('f-power').value = c.power||'';
     document.getElementById('f-weight').value = c.weight||'';
+    document.getElementById('f-aspiration').value = c.aspiration||'';
     if (c.img) { currentImgBase64=c.img; showImgPreview(c.img); }
   } else {
     document.getElementById('modal-title').innerHTML = 'Ajouter une <span>voiture</span>';
     ['f-make','f-name','f-year','f-pp','f-price','f-note','f-power','f-weight'].forEach(fid=>document.getElementById(fid).value='');
-    document.getElementById('f-country').value='';
     document.getElementById('f-cat').value='';
     document.getElementById('f-rarity').value='';
     document.getElementById('f-trans').value='';
+    document.getElementById('f-aspiration').value='';
   }
   document.getElementById('modal-bg').classList.add('open');
   setTimeout(()=>document.getElementById('f-make').focus(),100);
@@ -1096,13 +1174,14 @@ async function saveCar() {
     const oldCar = cars.find(c => c.id === editId);
     if (oldCar) emojiToSave = oldCar.emoji; 
   }
+  const make = document.getElementById('f-make').value.trim();
   const data = {
-    make: document.getElementById('f-make').value.trim(),
+    make,
     name,
     year: parseInt(document.getElementById('f-year').value)||null,
     pp: parseInt(document.getElementById('f-pp').value)||null,
     price: parseInt(document.getElementById('f-price').value)||null,
-    country: document.getElementById('f-country').value,
+    country: getCountryFromMake(make),
     cat: document.getElementById('f-cat').value,
     rarity: document.getElementById('f-rarity').value,
     emoji: emojiToSave,
@@ -1110,6 +1189,7 @@ async function saveCar() {
     trans: document.getElementById('f-trans').value,
     power: document.getElementById('f-power').value,
     weight: document.getElementById('f-weight').value,
+    aspiration: document.getElementById('f-aspiration').value,
     img: currentImgBase64 || null,
   };
   if (editId!==null) {
