@@ -532,6 +532,7 @@
           <option value="TC">TC — Turbo</option>
           <option value="SC">SC — Compresseur</option>
           <option value="VE">VE — Électrique</option>
+          <option value="TC+SC">TC+SC — Turbo + Compresseur</option>
         </select>
       </div>
       <div class="form-field">
@@ -990,7 +991,7 @@ function renderFilters() {
   }).join('');
   const aspirations={};
   cars.forEach(c=>{ if(c.aspiration) aspirations[c.aspiration]=(aspirations[c.aspiration]||0)+1; });
-  const aspirationLabels = { 'NA':'NA — Atmosphérique', 'TC':'TC — Turbo', 'SC':'SC — Compresseur', 'VE':'VE — Électrique' };
+  const aspirationLabels = { 'NA':'NA — Atmosphérique', 'TC':'TC — Turbo', 'SC':'SC — Compresseur', 'VE':'VE — Électrique', 'TC+SC':'TC+SC — Turbo + Compresseur' };
   function makeAspirationHTML(prefix) {
     const el = document.getElementById(prefix+'aspiration-filters');
     if (!el) return;
