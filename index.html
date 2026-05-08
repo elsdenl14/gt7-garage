@@ -564,6 +564,18 @@
         <label>Note perso (optionnel)</label>
         <input type="text" id="f-note" placeholder="ex: Voiture préférée !">
       </div>
+
+      <!-- Ligne 7 : Obtenue -->
+      <div class="form-field full" style="margin-top:0.25rem;">
+        <label style="display:flex;align-items:center;gap:0.6rem;cursor:pointer;user-select:none;">
+          <div id="f-owned-box" onclick="toggleOwnedBox()" style="
+            width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);
+            background:var(--bg3);display:flex;align-items:center;justify-content:center;
+            font-size:0.75rem;cursor:pointer;transition:all 0.15s;flex-shrink:0;
+          "></div>
+          <span style="font-size:0.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Voiture obtenue</span>
+        </label>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal()">Annuler</button>
@@ -895,13 +907,12 @@ function cardHTML(c) {
   const imgContent = c.img
     ? `<img src="${c.img}" alt="${c.name}">`
     : `<span style="font-size:3.5rem;line-height:1;">${c.emoji||'🚗'}</span>`;
-  return `<div class="car-card${isOwned?'':' not-owned'}${isWished?' wished-card':''}">
+  return `<div class="car-card${isOwned?'':' not-owned'}${isWished?' wished-card':''}" onclick="openLightbox(${c.id})" style="cursor:${c.img?'pointer':'default'}">
     <div class="car-img-wrap">
       ${imgContent}
       <button class="owned-toggle${isOwned?' owned':''}" onclick="event.stopPropagation();toggleOwned(${c.id})">${isOwned?'✓':'○'}</button>
       <button class="wish-btn${isWished?' wished':''}" onclick="event.stopPropagation();toggleWish(${c.id})" title="${isWished?'Retirer de la wishlist':'Ajouter à la wishlist'}">${isWished?'⭐':'☆'}</button>
       <span class="car-rarity ${rc}">${rl}</span>
-      ${c.img?`<button class="img-edit-btn" onclick="event.stopPropagation();openLightbox(${c.id})" title="Agrandir">🔍</button>`:''}
       <div class="wish-banner">⭐ Wishlist</div>
     </div>
     <div class="car-body">
@@ -936,8 +947,8 @@ function cardHTML(c) {
       ${c.note?`<div style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;font-style:italic;">${c.note}</div>`:''}
     </div>
     <div class="card-actions">
-      <button class="action-btn" onclick="editCar(${c.id})">✏️</button>
-      <button class="action-btn del" onclick="deleteCar(${c.id})">🗑️</button>
+      <button class="action-btn" onclick="event.stopPropagation();editCar(${c.id})">✏️</button>
+      <button class="action-btn del" onclick="event.stopPropagation();deleteCar(${c.id})">🗑️</button>
     </div>
   </div>`;
 }
@@ -1140,6 +1151,41 @@ function clearImgPreview() {
 function removeImg() { currentImgBase64 = null; clearImgPreview(); }
 
 /* MODAL */
+let fOwnedChecked = true;
+
+function toggleOwnedBox() {
+  fOwnedChecked = !fOwnedChecked;
+  const box = document.getElementById('f-owned-box');
+  if (fOwnedChecked) {
+    box.textContent = '✓';
+    box.style.background = 'rgba(232,200,64,0.18)';
+    box.style.borderColor = 'var(--accent)';
+    box.style.color = 'var(--accent)';
+  } else {
+    box.textContent = '';
+    box.style.background = 'var(--bg3)';
+    box.style.borderColor = 'var(--border)';
+    box.style.color = '';
+  }
+}
+
+function setOwnedBox(val) {
+  fOwnedChecked = val;
+  const box = document.getElementById('f-owned-box');
+  if (!box) return;
+  if (val) {
+    box.textContent = '✓';
+    box.style.background = 'rgba(232,200,64,0.18)';
+    box.style.borderColor = 'var(--accent)';
+    box.style.color = 'var(--accent)';
+  } else {
+    box.textContent = '';
+    box.style.background = 'var(--bg3)';
+    box.style.borderColor = 'var(--border)';
+    box.style.color = '';
+  }
+}
+
 function openModal(id=null) {
   editId = id;
   currentImgBase64 = null;
@@ -1160,6 +1206,7 @@ function openModal(id=null) {
     document.getElementById('f-power').value = c.power||'';
     document.getElementById('f-weight').value = c.weight||'';
     if (c.img) { currentImgBase64=c.img; showImgPreview(c.img); }
+    setOwnedBox(c.owned !== false);
   } else {
     document.getElementById('modal-title').innerHTML = 'Ajouter une <span>voiture</span>';
     ['f-make','f-name','f-year','f-pp','f-price','f-note','f-power','f-weight'].forEach(fid=>document.getElementById(fid).value='');
@@ -1167,6 +1214,7 @@ function openModal(id=null) {
     document.getElementById('f-cat').value='';
     document.getElementById('f-rarity').value='';
     document.getElementById('f-trans').value='';
+    setOwnedBox(true);
   }
   document.getElementById('modal-bg').classList.add('open');
   setTimeout(()=>document.getElementById('f-make').focus(),100);
@@ -1205,10 +1253,10 @@ async function saveCar() {
   };
   if (editId!==null) {
     const idx = cars.findIndex(c=>c.id===editId);
-    cars[idx] = {...cars[idx], ...data};
+    cars[idx] = {...cars[idx], ...data, owned: fOwnedChecked};
   } else {
     data.id = Date.now();
-    data.owned = true;
+    data.owned = fOwnedChecked;
     data.wished = false;
     cars.push(data);
   }
