@@ -1773,7 +1773,7 @@ async function saveCar() {
         weight:     document.getElementById('f-weight').value,
         aspiration: document.getElementById('f-aspiration').value,
         img:        currentImgBase64 || cars[idx].img || null,
-        owned:      fOwnedChecked,
+        owned:      cars[idx].owned, // <-- CORRECTION : on conserve l'état actuel
       };
       closeModal();
       showToast(t('toastSaving'));
@@ -1799,7 +1799,7 @@ async function saveCar() {
       weight:     document.getElementById('f-weight').value,
       aspiration: document.getElementById('f-aspiration').value,
       img:        currentImgBase64 || null,
-      owned:      fOwnedChecked,
+      owned:      true, // <-- CORRECTION : on la marque comme obtenue par défaut
       wished:     false,
     };
     cars.push(newCar);
