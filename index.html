@@ -397,13 +397,15 @@
       <div style="font-size:0.65rem;color:var(--muted);text-align:right;margin-top:1px;"><span id="progress-count">0</span> <span data-i18n="progressOf">/ 570 voitures</span></div>
     </div>
   </div>
-  <div class="lang-switcher">
-    <button class="lang-btn active" onclick="setLang('fr')">FR</button>
-    <button class="lang-btn" onclick="setLang('en')">EN</button>
-  </div>
-  <div class="auth-user-bar" id="header-user-bar" style="display:none;">
-    <span id="header-user-email"></span>
-    <button class="auth-logout-btn" onclick="signOut()">Déconnexion</button>
+  <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0;">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="auth-user-bar" id="header-user-bar" style="display:none;">
+      <span id="header-user-email"></span>
+      <button class="auth-logout-btn" onclick="signOut()">Déconnexion</button>
+    </div>
   </div>
 </header>
 
