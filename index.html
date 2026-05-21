@@ -1462,7 +1462,7 @@ function getFiltered() {
   if (activeTrans) list = list.filter(c => c.trans===activeTrans);
   if (activeAspiration) list = list.filter(c => c.aspiration===activeAspiration);
   if (activeYear) list = list.filter(c => c.year && Math.floor(c.year / 10) * 10 == activeYear);
-  if (activePP) list = list.filter(c => c.pp && Math.floor(c.pp / 100) * 100 == activePP);
+  if (activePP !== null) list = list.filter(c => c.pp && Math.floor(c.pp / 100) * 100 == activePP);
   if (activeMake) list = list.filter(c => c.make===activeMake);
   if (ownedFilter==='owned') list = list.filter(c => c.owned!==false);
   if (ownedFilter==='missing') list = list.filter(c => c.owned===false);
