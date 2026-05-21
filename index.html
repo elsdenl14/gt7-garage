@@ -326,7 +326,27 @@
     .mobile-nav-btn:active { transform: scale(0.92); }
   }
 
-  /* Masquer la nav mobile sur desktop */
+  /* ── AUTH SCREEN ─────────────────────────────────────────────────────── */
+  .auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+  .auth-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 2.5rem 2rem; width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+  .auth-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .auth-logo span { color: var(--accent); }
+  .auth-subtitle { font-size: 0.85rem; color: var(--muted); text-align: center; line-height: 1.5; }
+  .auth-form { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
+  .auth-form input[type="email"] { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 0.7rem 1rem; border-radius: 8px; font-family: 'Barlow', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.15s; }
+  .auth-form input[type="email"]:focus { border-color: var(--accent); }
+  .auth-form input[type="email"]::placeholder { color: var(--muted); }
+  .auth-btn { width: 100%; background: var(--accent); color: #000; border: none; padding: 0.7rem 1rem; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
+  .auth-btn:hover { opacity: 0.88; }
+  .auth-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .auth-msg { font-size: 0.85rem; text-align: center; line-height: 1.5; min-height: 1.2rem; }
+  .auth-msg.ok { color: var(--accent); }
+  .auth-msg.err { color: var(--accent2); }
+  .auth-divider { width: 100%; border: none; border-top: 1px solid var(--border); }
+  .auth-user-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0.75rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; font-size: 0.8rem; color: var(--muted); }
+  .auth-user-bar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+  .auth-logout-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.25rem 0.6rem; border-radius: 5px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; cursor: pointer; flex-shrink: 0; transition: all 0.15s; }
+  .auth-logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
   .mobile-nav { display: none; }
   .filter-drawer { display: none; }
   @media (max-width: 768px) {
@@ -381,7 +401,24 @@
     <button class="lang-btn active" onclick="setLang('fr')">FR</button>
     <button class="lang-btn" onclick="setLang('en')">EN</button>
   </div>
+  <div class="auth-user-bar" id="header-user-bar" style="display:none;">
+    <span id="header-user-email"></span>
+    <button class="auth-logout-btn" onclick="signOut()">Déconnexion</button>
+  </div>
 </header>
+
+<!-- ÉCRAN DE CONNEXION -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">Mon Garage <span>GT7</span></div>
+    <p class="auth-subtitle" id="auth-subtitle">Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.</p>
+    <div class="auth-form" id="auth-form-wrap">
+      <input type="email" id="auth-email" placeholder="ton@email.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
+      <button class="auth-btn" id="auth-btn" onclick="sendMagicLink()">Envoyer le lien de connexion</button>
+    </div>
+    <div class="auth-msg" id="auth-msg"></div>
+  </div>
+</div>
 
 <div class="layout">
   <aside>
@@ -1107,17 +1144,137 @@ const CATALOGUE = [
 
 ];
 
-// ── ID UTILISATEUR ─────────────────────────────────────────────────────────
-// Généré une seule fois et stocké dans localStorage du navigateur
-function getUserId() {
-  let uid = localStorage.getItem('gt7_uid');
-  if (!uid) {
-    uid = 'u_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
-    localStorage.setItem('gt7_uid', uid);
+// ── AUTH SUPABASE ───────────────────────────────────────────────────────────
+let currentUser = null; // { id, email }
+
+// Récupère la session depuis l'URL (magic link) ou le localStorage
+async function initAuth() {
+  // 1. Vérifier si un token est dans l'URL (retour magic link)
+  const hash = window.location.hash;
+  const params = new URLSearchParams(hash.replace('#', '?'));
+  const accessToken = params.get('access_token');
+  const refreshToken = params.get('refresh_token');
+
+  if (accessToken) {
+    // Nettoyer l'URL
+    history.replaceState(null, '', window.location.pathname);
+    // Stocker les tokens
+    localStorage.setItem('gt7_access_token', accessToken);
+    if (refreshToken) localStorage.setItem('gt7_refresh_token', refreshToken);
   }
-  return uid;
+
+  // 2. Essayer avec le token stocké
+  const storedToken = localStorage.getItem('gt7_access_token');
+  if (storedToken) {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + storedToken }
+      });
+      if (res.ok) {
+        const user = await res.json();
+        currentUser = { id: user.id, email: user.email };
+        onAuthSuccess();
+        return;
+      } else {
+        // Token expiré, essayer de le rafraîchir
+        const refreshed = await refreshSession();
+        if (refreshed) return;
+      }
+    } catch(e) { /* continue */ }
+  }
+
+  // 3. Aucune session valide → afficher l'écran de connexion
+  showAuthScreen();
 }
-const USER_ID = getUserId();
+
+async function refreshSession() {
+  const refreshToken = localStorage.getItem('gt7_refresh_token');
+  if (!refreshToken) return false;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refreshToken })
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    localStorage.setItem('gt7_access_token', data.access_token);
+    if (data.refresh_token) localStorage.setItem('gt7_refresh_token', data.refresh_token);
+    const user = data.user;
+    currentUser = { id: user.id, email: user.email };
+    onAuthSuccess();
+    return true;
+  } catch(e) { return false; }
+}
+
+async function sendMagicLink() {
+  const email = document.getElementById('auth-email').value.trim();
+  if (!email || !email.includes('@')) {
+    setAuthMsg('Adresse email invalide.', 'err');
+    return;
+  }
+  const btn = document.getElementById('auth-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+  setAuthMsg('');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, create_user: true })
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'Erreur inconnue');
+    }
+    setAuthMsg('✓ Lien envoyé ! Vérifie ta boîte mail.', 'ok');
+    document.getElementById('auth-subtitle').textContent = 'Un lien de connexion a été envoyé à ' + email + '. Clique dessus pour accéder à ton garage.';
+    document.getElementById('auth-form-wrap').style.opacity = '0.4';
+    document.getElementById('auth-form-wrap').style.pointerEvents = 'none';
+  } catch(e) {
+    setAuthMsg('Erreur : ' + e.message, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Envoyer le lien de connexion';
+  }
+}
+
+function setAuthMsg(msg, type='') {
+  const el = document.getElementById('auth-msg');
+  el.textContent = msg;
+  el.className = 'auth-msg' + (type ? ' ' + type : '');
+}
+
+function showAuthScreen() {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('header-user-bar').style.display = 'none';
+}
+
+function onAuthSuccess() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('header-user-bar').style.display = 'flex';
+  document.getElementById('header-user-email').textContent = currentUser.email;
+  // Mettre à jour les headers Supabase avec le token utilisateur
+  const token = localStorage.getItem('gt7_access_token');
+  SB_HEADERS['Authorization'] = 'Bearer ' + token;
+  loadFromSupabase();
+}
+
+function signOut() {
+  localStorage.removeItem('gt7_access_token');
+  localStorage.removeItem('gt7_refresh_token');
+  currentUser = null;
+  cars = [];
+  document.getElementById('cars-container').innerHTML = '';
+  // Reset form
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-btn').disabled = false;
+  document.getElementById('auth-btn').textContent = 'Envoyer le lien de connexion';
+  document.getElementById('auth-form-wrap').style.opacity = '';
+  document.getElementById('auth-form-wrap').style.pointerEvents = '';
+  document.getElementById('auth-subtitle').textContent = "Connecte-toi avec ton adresse email pour accéder à ton garage. Un lien de connexion te sera envoyé.";
+  setAuthMsg('');
+  showAuthScreen();
+}
 
 // ── ÉTAT LOCAL ─────────────────────────────────────────────────────────────
 // cars = catalogue fusionné avec l'état de l'utilisateur
@@ -1156,7 +1313,7 @@ async function loadFromSupabase() {
   showToast(t('toastLoad'));
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/user_states?user_id=eq.${encodeURIComponent(USER_ID)}&select=car_id,owned,wished,note,img`,
+      `${SUPABASE_URL}/rest/v1/user_states?user_id=eq.${encodeURIComponent(currentUser.id)}&select=car_id,owned,wished,note,img`,
       { headers: SB_HEADERS }
     );
     if (!res.ok) throw new Error(await res.text());
@@ -1194,7 +1351,7 @@ async function saveCarState(carId) {
       method: 'POST',
       headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
       body: JSON.stringify([{
-        user_id: USER_ID,
+        user_id: currentUser.id,
         car_id:  c.id,
         owned:   c.owned,
         wished:  c.wished,
@@ -1213,7 +1370,7 @@ async function saveCarState(carId) {
 async function save() {
   // Sauvegarder tous les états modifiés — utilisé après import/reset
   const payload = cars.map(c => ({
-    user_id: USER_ID,
+    user_id: currentUser.id,
     car_id:  c.id,
     owned:   c.owned,
     wished:  c.wished,
@@ -1854,7 +2011,7 @@ document.addEventListener('keydown', e => {
 
 /* INIT */
 applyLang();
-loadFromSupabase();
+initAuth();
 
 </script>
 </body>
