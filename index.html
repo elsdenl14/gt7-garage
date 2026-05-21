@@ -1558,6 +1558,10 @@ const BRAND_LOGO_OVERRIDES = {
   'mercedes benz': 'mercedes',
 };
 
+const BRAND_LOGO_STYLE = {
+  'abarth':      { width:'50px', top:'-0.3rem', right:'0.3rem' },
+};
+
 function getBrandLogoUrl(make) {
   if (!make) return null;
   const key = make.toLowerCase().trim();
@@ -1568,7 +1572,9 @@ function getBrandLogoUrl(make) {
 function logoImgTag(make, cls='brand-logo') {
   const url = getBrandLogoUrl(make);
   if (!url) return '';
-  return `<img src="${url}" alt="${make}" class="${cls}" onerror="this.style.display='none'">`;
+  const custom = BRAND_LOGO_STYLE[key] || {};
+  const style = Object.entries(custom).map(([k,v]) => `${k}:${v}`).join(';');
+  return `<img src="${url}" alt="${make}" class="${cls}" ${style ? `style="${style}"` : ''} onerror="this.style.display='none'">`;
 }
 
 function cardHTML(c) {
