@@ -1744,7 +1744,7 @@ function renderFilters() {
       const range = Math.floor(c.pp / 100) * 100; 
       PPs[range] = (PPs[range] || 0) + 1; }});
   document.getElementById('pp-filters').innerHTML =
-    `<button class="filter-btn ${!activePP?'active':''}" onclick="filterPP(null)">Tous <span class="count">${cars.length}</span></button>` +
+    `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">Tous <span class="count">${cars.length}</span></button>` +
     Object.entries(PPs).sort((a, b) => b[0] - a[0]).map(([pp, n]) => {
       const label = pp + " - " + (parseInt(pp) + 99);
       return `<button class="filter-btn ${activePP == pp ? 'active' : ''}" onclick="filterPP(${pp})">${label} <span class="count">${n}</span></button>`;}).join('');
