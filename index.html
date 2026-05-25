@@ -1735,64 +1735,32 @@ function renderFilters() {
   }
   makeAspirationHTML(''); makeAspirationHTML('m-');
 
-  const rarities={};
-  cars.forEach(c=>{ if(c.rarity) rarities[c.rarity]=(rarities[c.rarity]||0)+1; });
-  function makeRarityHTML(prefix) {
-    const el = document.getElementById(prefix+'rarity-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity(null)">Tous <span class="count">${cars.length}</span></button>`+
-      Object.entries(rarities).sort((a,b)=>b[1]-a[1]).map(([ra,n])=> {
-        const rarityName = labels[ra] || ra; 
-        return `<button class="filter-btn ${activeRarity===ra?'active':''}" onclick="filterRarity('${ra}')">${rarityName} <span class="count">${n}</span></button>`;
-      }).join('');
-  }
-  makeRarityHTML(''); makeRarityHTML('m-');
-
   const transs={};
   cars.forEach(c=>{ if(c.trans) transs[c.trans]=(transs[c.trans]||0)+1; });
-  function makeTransHTML(prefix) {
-    const id = prefix === 'm-' ? 'm-transmission-filters' : 'trans-filters';
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">Tous <span class="count">${cars.length}</span></button>`+
-      Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>
-      `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`).join('');
-  }
-  makeTransHTML(''); makeTransHTML('m-');
-
+  document.getElementById('trans-filters').innerHTML =
+    `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">Tous <span class="count">${cars.length}</span></button>`+
+    Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>
+    `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`).join('');
   const years = {};
   cars.forEach(c => { 
     if (c.year) {
       const decade = Math.floor(c.year / 10) * 10; 
       years[decade] = (years[decade] || 0) + 1; }});
-  function makeYearHTML(prefix) {
-    const el = document.getElementById(prefix+'year-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">Tous <span class="count">${cars.length}</span></button>` +
-      Object.entries(years).sort((a, b) => b[0] - a[0]).map(([ye, n]) => {
-        const label = ye + "s"; 
-        return `<button class="filter-btn ${activeYear == ye ? 'active' : ''}" onclick="filterYear(${ye})">${label} <span class="count">${n}</span></button>`;}).join('');
-  }
-  makeYearHTML(''); makeYearHTML('m-');
-
+  document.getElementById('year-filters').innerHTML =
+    `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">Tous <span class="count">${cars.length}</span></button>` +
+    Object.entries(years).sort((a, b) => b[0] - a[0]).map(([ye, n]) => {
+      const label = ye + "s"; 
+      return `<button class="filter-btn ${activeYear == ye ? 'active' : ''}" onclick="filterYear(${ye})">${label} <span class="count">${n}</span></button>`;}).join('');
   const PPs = {};
   cars.forEach(c => { 
     if (c.pp) {
       const range = Math.floor(c.pp / 100) * 100; 
       PPs[range] = (PPs[range] || 0) + 1; }});
-  function makePPHTML(prefix) {
-    const el = document.getElementById(prefix+'pp-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">Tous <span class="count">${cars.length}</span></button>` +
-      Object.entries(PPs).sort((a, b) => b[0] - a[0]).map(([pp, n]) => {
-        const label = pp + " - " + (parseInt(pp) + 99);
-        return `<button class="filter-btn ${activePP == pp ? 'active' : ''}" onclick="filterPP(${pp})">${label} <span class="count">${n}</span></button>`;}).join('');
-  }
-  makePPHTML(''); makePPHTML('m-');
+  document.getElementById('pp-filters').innerHTML =
+    `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">Tous <span class="count">${cars.length}</span></button>` +
+    Object.entries(PPs).sort((a, b) => b[0] - a[0]).map(([pp, n]) => {
+      const label = pp + " - " + (parseInt(pp) + 99);
+      return `<button class="filter-btn ${activePP == pp ? 'active' : ''}" onclick="filterPP(${pp})">${label} <span class="count">${n}</span></button>`;}).join('');
   const makes2={};
   cars.forEach(c=>{ if(c.make) makes2[c.make]=(makes2[c.make]||0)+1; });
   function makeMakeHTML(prefix) {
