@@ -16,7 +16,7 @@ const LANGS = {
     filterAllLabel:'Toutes', filterAllLabelM:'Tous',
     // Toolbar
     sortBy:'Trier par', sortName:'Nom', sortMake:'Marque', sortYear:'Année', sortPrice:'Prix',
-    sortPower:'Puissance', sortWeight:'Poids', sortAdded:'Ajout récent',
+    sortPower:'Puissance', sortWeight:'Poids',
     // Formulaire
     formPhoto:'Photo de la voiture', formPhotoClick:'Clique pour ajouter une photo',
     formPhotoSub:'JPG · PNG · WEBP — compressée et stockée localement',
@@ -62,7 +62,7 @@ const LANGS = {
     filterAllLabel:'All', filterAllLabelM:'All',
     // Toolbar
     sortBy:'Sort by', sortName:'Name', sortMake:'Brand', sortYear:'Year', sortPrice:'Price',
-    sortPower:'Power', sortWeight:'Weight', sortAdded:'Recently added',
+    sortPower:'Power', sortWeight:'Weight',
     // Form
     formPhoto:'Car photo', formPhotoClick:'Click to add a photo',
     formPhotoSub:'JPG · PNG · WEBP — compressed and stored locally',
@@ -483,7 +483,6 @@ function getFiltered() {
     if (sort==='pp') return (b.pp||0)-(a.pp||0);
     if (sort==='year') return (b.year||0)-(a.year||0);
     if (sort==='price') return (b.price||0)-(a.price||0);
-    if (sort==='added') return b.id-a.id;
     if (sort==='power') return (b.power||0)-(a.power||0);
     if (sort==='weight') return (b.weight||0)-(a.weight||0);
     return 0;
