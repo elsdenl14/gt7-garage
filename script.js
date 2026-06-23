@@ -10,7 +10,7 @@ const LANGS = {
     collection:'Collection GT7', progressOf:'/ 570 voitures', btnAdd:'+ Ajouter',
     // Sidebar
     filterStatus:'Statut', filterAll:'Toutes', filterOwned:'✓ Obtenues', filterMissing:'○ Manquantes', filterWish:'⭐ Wishlist',
-    filterLegend:'Voitures de légende', filterSearch:'Recherche', searchPlaceholder:'Nom, marque…',
+    filterLegend:'🚗 Voitures de légende', filterSearch:'Recherche', searchPlaceholder:'Nom, marque…',
     filterMake:'Marque', filterCat:'Catégorie', filterCountry:'Pays', filterRarity:'Rareté',
     filterAspiration:'Aspiration', filterTrans:'Transmission', filterYear:'Année',
     filterAllLabel:'Toutes', filterAllLabelM:'Tous',
@@ -56,7 +56,7 @@ const LANGS = {
     collection:'GT7 Collection', progressOf:'/ 570 cars', btnAdd:'+ Add',
     // Sidebar
     filterStatus:'Status', filterAll:'All', filterOwned:'✓ Owned', filterMissing:'○ Missing', filterWish:'⭐ Wishlist',
-    filterLegend:'Legend Cars', filterSearch:'Search', searchPlaceholder:'Name, brand…',
+    filterLegend:'🚗 Legend Cars', filterSearch:'Search', searchPlaceholder:'Name, brand…',
     filterMake:'Brand', filterCat:'Category', filterCountry:'Country', filterRarity:'Rarity',
     filterAspiration:'Aspiration', filterTrans:'Drivetrain', filterYear:'Year',
     filterAllLabel:'All', filterAllLabelM:'All',
