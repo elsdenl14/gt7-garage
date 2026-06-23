@@ -739,7 +739,7 @@ function renderFilters() {
       Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>{
        return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`;
         }).join('');  }  
-}  makeTransHTML(''); makeTransHTML('m-');
+      makeTransHTML(''); makeTransHTML('m-');
 
   const years={};
   cars.forEach(c=>{ if(c.year){ const d=Math.floor(c.year/10)*10; years[d]=(years[d]||0)+1; }});
@@ -800,7 +800,7 @@ function renderFilters() {
       Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>       
       `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${ct} <span class="count">${n}</span></button>`).join('');
   }  makeCountryHTML(''); makeCountryHTML('m-');
-
+}
   const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
   document.getElementById('makes-list').innerHTML = makes.map(m=>`<option value="${m}">`).join('');
 
