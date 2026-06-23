@@ -446,7 +446,7 @@ function renderFilters() {
   }).join('');
   
   document.getElementById('pp-filters').innerHTML = 
-    `<button class="filter-btn ${!activePP?'active':''}" onclick="filterPP('')">${p} ${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + ppHtml;
+    `<button class="filter-btn ${!activePP?'active':''}" onclick="filterPP('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + ppHtml;
   document.getElementById('m-pp-filters').innerHTML = 
     `<button class="filter-btn ${!activePP?'active':''}" onclick="filterPP('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + ppHtml;
 
