@@ -445,19 +445,23 @@ function filterOwned(mode) {
   const do_ = document.getElementById('filter-owned-btn');
   const dn = document.getElementById('filter-notowned-btn');
   const dw = document.getElementById('filter-wish-btn');
+  const dl = document.getElementById('filter-legend-btn');
   if(da) da.classList.toggle('active', mode==='all');
   if(do_) do_.classList.toggle('active', mode==='owned');
   if(dn) dn.classList.toggle('active', mode==='missing');
   if(dw) dw.classList.toggle('active', mode==='wishlist');
+  if(dl) dl.classList.toggle('active', mode==='legend');
   // Mobile buttons
   const ma = document.getElementById('m-filter-all-btn');
   const mo = document.getElementById('m-filter-owned-btn');
   const mn = document.getElementById('m-filter-notowned-btn');
   const mw = document.getElementById('m-filter-wish-btn');
+  const ml = document.getElementById('m-filter-legend-btn');
   if(ma) ma.classList.toggle('active', mode==='all');
   if(mo) mo.classList.toggle('active', mode==='owned');
   if(mn) mn.classList.toggle('active', mode==='missing');
   if(mw) mw.classList.toggle('active', mode==='wishlist');
+  if(ml) ml.classList.toggle('active', mode==='legend');
   render();
 }
 
@@ -599,6 +603,7 @@ function cardHTML(c) {
       <button class="wish-btn${isWished?' wished':''}" onclick="event.stopPropagation();toggleWish(${c.id})" title="${isWished?'Retirer de la wishlist':'Ajouter à la wishlist'}">${isWished?'⭐':'☆'}</button>
       <span class="car-rarity ${rc}">${rl}</span>
       <div class="wish-banner">⭐ Wishlist</div>
+      ${isLegendCar(c) ? '<span class="legend-badge">🚗 Légende</span>' : ''}
     </div>
     <div class="car-body">
       ${logoImgTag(c.make)}
@@ -1034,6 +1039,11 @@ document.addEventListener('keydown', e => {
     if (e.key==='ArrowRight') modalNavigate(1);
   }
 });
+
+function isLegendCar(c) {
+  const LEGEND_CAR_IDS = [1,2,3];
+  return LEGEND_CAR_IDS.includes(c.id);
+}
 
 /* INIT */
 async function initApp() {
