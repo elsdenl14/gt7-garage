@@ -48,7 +48,7 @@
     </div>
     <div class="auth-user-bar" id="header-user-bar" style="display:none;">
       <span id="header-user-email"></span>
-      <button class="auth-logout-btn" onclick="signOut()">Déconnexion</button>
+      <button class="auth-logout-btn" onclick="signOut()" data-i18n="signout">Déconnexion</button>
     </div>
   </div>
 </header>
@@ -57,10 +57,10 @@
 <div class="auth-screen" id="auth-screen">
   <div class="auth-box">
     <div class="auth-logo">Mon Garage <span>GT7</span></div>
-    <p class="auth-subtitle" id="auth-subtitle">Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.</p>
+    <p class="auth-subtitle" id="auth-subtitle" data-i18n="authSubtitle">Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.</p>
     <div class="auth-form" id="auth-form-wrap">
-      <input type="email" id="auth-email" placeholder="ton@email.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
-      <button class="auth-btn" id="auth-btn" onclick="sendMagicLink()">Envoyer le lien de connexion</button>
+      <input type="email" id="auth-email" placeholder="johndoe@email.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
+      <button class="auth-btn" id="auth-btn" onclick="sendMagicLink()" data-i18n="sendMagicLink">Envoyer le lien de connexion</button>
     </div>
     <div class="auth-msg" id="auth-msg"></div>
   </div>
@@ -76,8 +76,8 @@
         <button id="filter-notowned-btn" onclick="filterOwned('missing')" data-i18n="filterMissing">○ Manquantes</button>
       </div>
       <div class="owned-filter" style="margin-top:4px;">
-        <button id="filter-wish-btn" onclick="filterOwned('wishlist')" style="flex:1;" data-i18n="filterWish">⭐ Wishlist</button>
-        <button id="filter-legend-btn" onclick="filterOwned('legenda')" style="flex:1;" data-i18n="filterLegend">Voitures de légende</button>
+        <button id="filter-wish-btn" class="filter-btn" onclick="filterOwned('wishlist')" style="flex:1;" data-i18n="filterWish">⭐ Wishlist</button>
+        <button id="filter-legend-btn" class="filter-btn" onclick="filterOwned('legenda')" style="flex:1;" data-i18n="filterLegend">Voitures de légende</button>
       </div>
     </div>
     <div class="sidebar-section">
