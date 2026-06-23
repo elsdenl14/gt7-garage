@@ -356,7 +356,7 @@
 
   .legend-badge {
   position: absolute;
-  top: 50px; 
+  top: 70px; 
   left: 10px;
   
   background: rgba(0, 0, 0, 0.75);
@@ -369,5 +369,5 @@
   pointer-events: none; 
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
