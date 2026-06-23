@@ -119,13 +119,22 @@ function applyLang() {
   // Mettre à jour tous les éléments avec data-i18n
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (t(key)) el.textContent = t(key);
+    if (t(key)) {
+      // Si c'est le sous-titre d'authentification, on autorise le HTML pour le <br>
+      if (key === 'authSubtitle') {
+        el.innerHTML = t(key);
+      } else {
+        el.textContent = t(key);
+      }
+    }
   });
+
   // Mettre à jour les placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (t(key)) el.placeholder = t(key);
   });
+
   // Mettre à jour les options de select
   document.querySelectorAll('option[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -1050,7 +1059,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
-function isLegendCar(c) {
+*function isLegendCar(c) {
   const LEGEND_CAR_IDS = [149,15,19,328,354,262,333,184];
   return LEGEND_CAR_IDS.includes(c.id);
 }
