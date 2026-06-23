@@ -356,7 +356,7 @@
 
   .legend-badge {
   position: absolute;
-  bottom: 10px;
+  bottom: 5px;
   left: 10px;
   background: rgba(255, 215, 0, 0.9); 
   color: #000;
