@@ -603,7 +603,7 @@ function cardHTML(c) {
       <button class="wish-btn${isWished?' wished':''}" onclick="event.stopPropagation();toggleWish(${c.id})" title="${isWished?'Retirer de la wishlist':'Ajouter à la wishlist'}">${isWished?'⭐':'☆'}</button>
       <span class="car-rarity ${rc}">${rl}</span>
       <div class="wish-banner">⭐ Wishlist</div>
-      ${isLegendCar(c) ? '<span class="legend-badge">🚗 Légende</span>' : ''}
+      ${isLegendCar(c) ? '<span class="legend-badge">🚗</span>' : ''}
     </div>
     <div class="car-body">
       ${logoImgTag(c.make)}
