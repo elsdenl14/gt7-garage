@@ -1,1100 +1,906 @@
-const SUPABASE_URL = 'https://nspwapqjphuzqwlqdfnj.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zcHdhcHFqcGh1enF3bHFkZm5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzI3NjEsImV4cCI6MjA5Mjc0ODc2MX0.xicZWCTkJIPKLXfVzLrmP4n20xboufMwcjRldMM0E5c';
-const SB_HEADERS = { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
-
-// ── SYSTÈME I18N ────────────────────────────────────────────────────────────
+// ==========================================
+// CONFIGURATION i18n
+// ==========================================
 const LANGS = {
   fr: {
-    // Header
-    statOwned:'Obtenues', statCr:'Cr total', statPP:'PP max', statPower:'Puissance max', statWeight:'Poids max',
-    collection:'Collection GT7', progressOf:'/ 570 voitures', signout:'Déconnexion',
-
-    //connexion
-    authSubtitle:'Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.',
-    sendMagicLink:'Envoyer le lien de connexion',
-    // Sidebar
-    filterStatus:'Statut', filterAll:'Toutes', filterOwned:'✓ Obtenues', filterMissing:'○ Manquantes', filterWish:'⭐ Wishlist',
-    filterLegend:'🚗 Voitures de légende', filterSearch:'Recherche', searchPlaceholder:'Nom, marque…',
-    filterMake:'Marque', filterCat:'Catégorie', filterCountry:'Pays', filterRarity:'Rareté',
-    filterAspiration:'Aspiration', filterTrans:'Transmission', filterYear:'Année',
-    filterAllLabel:'Toutes', filterAllLabelM:'Tous',
-    // Toolbar
-    sortBy:'Trier par', sortName:'Nom', sortMake:'Marque', sortYear:'Année', sortPrice:'Prix',
-    sortPower:'Puissance', sortWeight:'Poids',
-    // Formulaire
-    formPhoto:'Photo de la voiture', formPhotoClick:'Clique pour ajouter une photo',
-    formPhotoSub:'JPG · PNG · WEBP — compressée et stockée localement',
-    formPhotoChange:'🔄 Changer', formPhotoRemove:'✕ Supprimer',
-    formMake:'Marque', formMakePh:'ex: Nissan', formModel:'Modèle', formModelPh:'ex: GT-R (R34)',
-    formYear:'Année', formPrice:'Prix (Cr)', formPP:'PP (Performance Points)',
-    formTrans:'Transmission', formPower:'Puissance max (ch)', formWeight:'Poids (kg)',
-    formAspiration:'Aspiration', formCat:'Catégorie', formRarity:'Rareté',
-    formNote:'Note perso (optionnel)', formNotePh:'ex: Voiture préférée !',
-    formSelect:'— Sélectionner —', formOwned:'Voiture obtenue', formNA:'NA — Atmosphérique', formTC:'TC — Turbo', 
-    formSC:'SC — Compresseur', formVE:'VE — Électrique', formTCSC:'TC+SC — Turbo + Compresseur', form4RM:'4RM',
-    countryJapon: "🇯🇵 Japon", countryItalie: "🇮🇹 Italie", countryEtatsUnis: "🇺🇸 États-Unis", countryAllemagne: "🇩🇪 Allemagne", countryRoyaumeUni: "🇬🇧 Royaume-Uni",
-    countryFrance: "🇫🇷 France", countryCoree: "🇰🇷 Corée du Sud", countryAutre: "🌍 Autre", countryAutriche: "🇦🇹 Autriche", countrySuede: "🇸🇪 Suède",
-    countryTchéquie: "🇨🇿 République Tchèque", countryChine: "🇨🇳 Chine",
-    btnCancel:'Annuler', btnSave:'Enregistrer',
-    catRoad:'Routière', catRace:'Course',
-    raritySpecial:"Voitures d'Occasion", rarityLegend:'Voitures de Légende',
-    // Modal title
-    modalAdd:'Ajouter une', modalEdit:'Modifier la', modalCar:'voiture',
-    // Mobile nav / drawer
-    navGarage:'Garage', navWish:'Wishlist', navAdd:'Ajouter', navFilters:'Filtres',
-    drawerFilters:'Filtres',
-    // Cards / list
-    csKeyPP:'PP', csKeyCr:'Cr', csKeyCh:'ch', csKeyKg:'kg',
-    confirmDelete:'Supprimer cette voiture ?', confirmReset:"Réinitialiser l'état de cette voiture ?",
-    toastLoad:'⏳ Chargement du garage…', toastLoaded:'✓ Garage chargé',
-    toastSaving:'💾 Sauvegarde…', toastSaved:'✓ Voiture enregistrée', toastUpdated:'✓ Voiture mise à jour',
-    toastDeleting:'🗑️ Suppression…', toastDeleted:'✓ Voiture supprimée', toastReset:'✓ État réinitialisé',
-    toastError:'❌ Erreur de connexion', toastSaveError:'❌ Erreur de sauvegarde', toastDelError:'❌ Erreur suppression',
-    emptyNone:'Aucune voiture dans ton garage.', emptyFound:'Aucune voiture trouvée.',
-    emptyBtn:'+ Ajouter ma première voiture',
-    // Rarity labels
-    rarityNormal:'Brand Central', raritySpecialCard:"Voitures d'Occasion", rarityLegendCard:'Voitures de Légende',
-    wishAdd:'Ajouter à la wishlist', wishRemove:'Retirer de la wishlist',
-    ownedMark:'Marquer comme obtenue', ownedUnmark:'Marquer comme non obtenue',
-    deleteReset:"Réinitialiser l'état de cette voiture ?",
+    statOwned: "Obtenues",
+    statCr: "Cr total",
+    statPP: "PP max",
+    statPower: "Puissance max",
+    statWeight: "Poids max",
+    collection: "Collection GT7",
+    progressOf: "/ 570 voitures",
+    signout: "Déconnexion",
+    authSubtitle: "Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.",
+    sendMagicLink: "Envoyer le lien de connexion",
+    filterStatus: "Statut",
+    filterAll: "Toutes",
+    filterMissing: "○ Manquantes",
+    filterWish: "⭐ Wishlist",
+    filterLegend: "Voitures de légende",
+    filterSearch: "Recherche",
+    searchPlaceholder: "Nom, marque…",
+    filterMake: "Marque",
+    filterCat: "Catégorie",
+    filterCountry: "Pays",
+    filterRarity: "Rareté",
+    filterAspiration: "Aspiration",
+    filterTrans: "Transmission",
+    filterYear: "Année",
+    sortBy: "Trier par",
+    sortName: "Nom",
+    sortMake: "Marque",
+    sortYear: "Année",
+    sortPrice: "Prix",
+    sortPower: "Puissance",
+    sortWeight: "Poids",
+    formPhoto: "Photo de la voiture",
+    formPhotoClick: "Clique pour ajouter une photo",
+    formPhotoSub: "JPG · PNG · WEBP — compressée et stockée localement",
+    formPhotoChange: "🔄 Changer",
+    formPhotoRemove: "✕ Supprimer",
+    formMake: "Marque",
+    formMakePh: "ex: Nissan",
+    formModel: "Modèle",
+    formModelPh: "ex: GT-R (R34)",
+    formYear: "Année",
+    formPrice: "Prix (Cr)",
+    formPP: "PP (Performance Points)",
+    formTrans: "Transmission",
+    formSelect: "— Sélectionner —",
+    form4RM: "4RM",
+    formPower: "Puissance max (ch)",
+    formWeight: "Poids (kg)",
+    formAspiration: "Aspiration",
+    formNA: "NA — Atmosphérique",
+    formTC: "TC — Turbo",
+    formSC: "SC — Compresseur",
+    formVE: "VE — Électrique",
+    formTCSC: "TC+SC — Turbo + Compresseur",
+    formCat: "Catégorie",
+    catRoad: "Routière",
+    catRace: "Course",
+    formRarity: "Rareté",
+    raritySpecial: "Voitures d'Occasion",
+    rarityLegend: "Voitures de Légende",
+    formNote: "Note perso (optionnel)",
+    formNotePh: "ex: Voiture préférée !",
+    btnCancel: "Annuler",
+    btnSave: "Enregistrer",
+    drawerFilters: "Filtres",
+    navGarage: "Garage",
+    navWish: "Wishlist",
+    navFilters: "Filtres",
+    
+    // Nouveaux labels dynamiques
+    filterAllLabel: "Toutes",
+    filterAllLabelM: "Tous",
+    countryJapon: "Japon",
+    countryItalie: "Italie",
+    countryEtatsUnis: "États-Unis",
+    countryAllemagne: "Allemagne",
+    countryRoyaumeUni: "Royaume-Uni",
+    countryFrance: "France",
+    countryCoree: "Corée du Sud",
+    countryAutre: "Autre",
+    countryAutriche: "Autriche",
+    countrySuede: "Suède"
   },
   en: {
-    // Header
-    statOwned:'Owned', statCr:'Total Cr', statPP:'Max PP', statPower:'Max Power', statWeight:'Max Weight',
-    collection:'GT7 Collection', progressOf:'/ 570 cars', signout:'Sign out',
-
-    // Connexion
-    authSubtitle:'Connect with your email address to access your garage.<br>A connection link will be sent to you.',
-    sendMagicLink:'Send connection link',
-
-    // Sidebar
-    filterStatus:'Status', filterAll:'All', filterOwned:'✓ Owned', filterMissing:'○ Missing', filterWish:'⭐ Wishlist',
-    filterLegend:'🚗 Legend Cars', filterSearch:'Search', searchPlaceholder:'Name, brand…',
-    filterMake:'Brand', filterCat:'Category', filterCountry:'Country', filterRarity:'Rarity',
-    filterAspiration:'Aspiration', filterTrans:'Drivetrain', filterYear:'Year',
-    filterAllLabel:'All', filterAllLabelM:'All',
-    // Toolbar
-    sortBy:'Sort by', sortName:'Name', sortMake:'Brand', sortYear:'Year', sortPrice:'Price',
-    sortPower:'Power', sortWeight:'Weight',
-    // Form
-    formPhoto:'Car photo', formPhotoClick:'Click to add a photo',
-    formPhotoSub:'JPG · PNG · WEBP — compressed and stored locally',
-    formPhotoChange:'🔄 Change', formPhotoRemove:'✕ Remove',
-    formMake:'Brand', formMakePh:'e.g. Nissan', formModel:'Model', formModelPh:'e.g. GT-R (R34)',
-    formYear:'Year', formPrice:'Price (Cr)', formPP:'PP (Performance Points)',
-    formTrans:'Drivetrain', formPower:'Max power (hp)', formWeight:'Weight (kg)',
-    formAspiration:'Aspiration', formCat:'Category', formRarity:'Rarity',
-    formNote:'Personal note (optional)', formNotePh:'e.g. My favourite car!',
-    formSelect:'— Select —', formOwned:'Car obtained', formNA:'NA — Naturally aspirated', formTC:'TC — Turbo', 
-    formSC:'SC — Supercharged', formVE:'VE — Electric', formTCSC:'TC+SC — Turbo + Supercharged', form4RM:'4WD',
-    countryJapon: "🇯🇵 Japan", countryItalie: "🇮🇹 Italy", countryEtatsUnis: "🇺🇸 United States", countryAllemagne: "🇩🇪 Germany", countryRoyaumeUni: "🇬🇧 United Kingdom",
-    countryFrance: "🇫🇷 France", countryCoree: "🇰🇷 South Korea", countryAutre: "🌍 Other", countryAutriche: "🇦🇹 Austria", countrySuede: "🇸🇪 Sweden",
-    countryTchéquie: "🇨🇿 Czech Republic", countryChine: "🇨🇳 China",
-    btnCancel:'Cancel', btnSave:'Save',
-    catRoad:'Road', catRace:'Race',
-    raritySpecial:'Used Cars', rarityLegend:'Legend Cars',
-    // Modal title
-    modalAdd:'Add a', modalEdit:'Edit', modalCar:'car',
-    // Mobile nav / drawer
-    navGarage:'Garage', navWish:'Wishlist', navAdd:'Add', navFilters:'Filters',
-    drawerFilters:'Filters',
-    // Cards / list
-    csKeyPP:'PP', csKeyCr:'Cr', csKeyCh:'hp', csKeyKg:'kg',
-    confirmDelete:'Delete this car?', confirmReset:'Reset this car\'s status?',
-    toastLoad:'⏳ Loading garage…', toastLoaded:'✓ Garage loaded',
-    toastSaving:'💾 Saving…', toastSaved:'✓ Car saved', toastUpdated:'✓ Car updated',
-    toastDeleting:'🗑️ Deleting…', toastDeleted:'✓ Car deleted', toastReset:'✓ Status reset',
-    toastError:'❌ Connection error', toastSaveError:'❌ Save error', toastDelError:'❌ Delete error',
-    emptyNone:'No cars in your garage.', emptyFound:'No cars found.',
-    emptyBtn:'+ Add my first car',
-    // Rarity labels
-    rarityNormal:'Brand Central', raritySpecialCard:'Used Cars', rarityLegendCard:'Legend Cars',
-    wishAdd:'Add to wishlist', wishRemove:'Remove from wishlist',
-    ownedMark:'Mark as obtained', ownedUnmark:'Mark as not obtained',
-    deleteReset:'Reset this car\'s status?',
+    statOwned: "Owned",
+    statCr: "Total Cr",
+    statPP: "Max PP",
+    statPower: "Max Power",
+    statWeight: "Max Weight",
+    collection: "GT7 Collection",
+    progressOf: "/ 570 cars",
+    signout: "Sign out",
+    authSubtitle: "Sign in with your email address to access your garage.<br>A magic link will be sent to you.",
+    sendMagicLink: "Send magic link",
+    filterStatus: "Status",
+    filterAll: "All",
+    filterMissing: "○ Missing",
+    filterWish: "⭐ Wishlist",
+    filterLegend: "Legend Cars",
+    filterSearch: "Search",
+    searchPlaceholder: "Name, brand…",
+    filterMake: "Brand",
+    filterCat: "Category",
+    filterCountry: "Country",
+    filterRarity: "Rarity",
+    filterAspiration: "Aspiration",
+    filterTrans: "Transmission",
+    filterYear: "Year",
+    sortBy: "Sort by",
+    sortName: "Name",
+    sortMake: "Brand",
+    sortYear: "Year",
+    sortPrice: "Price",
+    sortPower: "Power",
+    sortWeight: "Weight",
+    formPhoto: "Car Photo",
+    formPhotoClick: "Click to add a photo",
+    formPhotoSub: "JPG · PNG · WEBP — compressed and stored locally",
+    formPhotoChange: "🔄 Change",
+    formPhotoRemove: "✕ Remove",
+    formMake: "Brand",
+    formMakePh: "e.g., Nissan",
+    formModel: "Model",
+    formModelPh: "e.g., GT-R (R34)",
+    formYear: "Year",
+    formPrice: "Price (Cr)",
+    formPP: "PP (Performance Points)",
+    formTrans: "Transmission",
+    formSelect: "— Select —",
+    form4RM: "4WD",
+    formPower: "Max Power (hp)",
+    formWeight: "Weight (kg)",
+    formAspiration: "Aspiration",
+    formNA: "NA — Naturally Aspirated",
+    formTC: "TC — Turbocharged",
+    formSC: "SC — Supercharged",
+    formVE: "EV — Electric Vehicle",
+    formTCSC: "TC+SC — Twincharged",
+    formCat: "Category",
+    catRoad: "Road Car",
+    catRace: "Race Car",
+    formRarity: "Rarity",
+    raritySpecial: "Used Cars",
+    rarityLegend: "Legend Cars",
+    formNote: "Personal Note (optional)",
+    formNotePh: "e.g., Favorite car!",
+    btnCancel: "Cancel",
+    btnSave: "Save",
+    drawerFilters: "Filters",
+    navGarage: "Garage",
+    navWish: "Wishlist",
+    navFilters: "Filters",
+    
+    // Nouveaux labels dynamiques
+    filterAllLabel: "All",
+    filterAllLabelM: "All",
+    countryJapon: "Japan",
+    countryItalie: "Italy",
+    countryEtatsUnis: "United States",
+    countryAllemagne: "Germany",
+    countryRoyaumeUni: "United Kingdom",
+    countryFrance: "France",
+    countryCoree: "South Korea",
+    countryAutre: "Other",
+    countryAutriche: "Austria",
+    countrySuede: "Sweden"
   }
 };
 
 let currentLang = localStorage.getItem('gt7_lang') || 'fr';
 
-function t(key) { return LANGS[currentLang][key] || LANGS['fr'][key] || key; }
-
-function applyLang() {
-  // Mettre à jour les boutons du sélecteur
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
-  });
-  // Mettre à jour tous les éléments avec data-i18n
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t(key)) {
-      // Si c'est le sous-titre d'authentification, on autorise le HTML pour le <br>
-      if (key === 'authSubtitle') {
-        el.innerHTML = t(key);
-      } else {
-        el.textContent = t(key);
-      }
-    }
-  });
-
-  // Mettre à jour les placeholders
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (t(key)) el.placeholder = t(key);
-  });
-
-  // Mettre à jour les options de select
-  document.querySelectorAll('option[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t(key)) el.textContent = t(key);
-  });
-}
-
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('gt7_lang', lang);
-  applyLang();
-  render(); // re-render pour les toasts, labels des cartes, etc.
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  // Petit hack visuel rapide pour les boutons du header
+  if(lang==='fr') document.querySelector(".lang-btn[onclick*='fr']").classList.add('active');
+  if(lang==='en') document.querySelector(".lang-btn[onclick*='en']").classList.add('active');
+  updateStaticTranslations();
+  renderFilters();
+  render();
 }
 
-// ── CATALOGUE FIXE ─────────────────────────────────────────────────────────
-// Toutes les voitures GT7. Chaque entrée a un id fixe et permanent.
-// owned/wished/note/img sont gérés par l'état utilisateur dans Supabase.
-let CATALOGUE = [];
-
-function getCarEmoji(car) {
-  return (car?.cat || '').trim().toLowerCase() === 'routière' ? '🚗' : '🏎️';
+function t(key) {
+  return LANGS[currentLang][key] || LANGS['fr'][key] || key;
 }
 
-function addComputedCarFields(car) {
-  return {
-    ...car,
-    country: getCountryFromMake(car.make),
-    emoji: getCarEmoji(car),
-  };
+function updateStaticTranslations() {
+  // Traduction des éléments avec data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.innerHTML = t(key);
+  });
+  // Traduction des placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = t(key);
+  });
 }
 
-async function loadCatalogue() {
-  const res = await fetch('cars.json');
-  if (!res.ok) throw new Error('Impossible de charger cars.json');
-  const data = await res.json();
-  CATALOGUE = data.map(addComputedCarFields);
-}
+// ==========================================
+// BASE DE DONNÉES LOCALES & FILTRES ACTIFS
+// ==========================================
+let cars = [];       // Base de données complète des 570+ voitures du jeu
+let userCars = {};   // { carId: { owned: true/false, wishlist: true/false, photo: "base64...", note: "..." } }
+let currentUserId = null;
 
+// Filtres actifs
+let activeOwned = 'all'; // 'all', 'owned', 'missing', 'wishlist', 'legenda'
+let activeMake = '';
+let activeCategory = '';
+let activeCountry = '';
+let activeRarity = '';
+let activeAspiration = '';
+let activeTrans = '';
+let activeYear = '';
+let activePP = '';
 
-// ── AUTH SUPABASE ───────────────────────────────────────────────────────────
-let currentUser = null; // { id, email }
+// Liste ordonnée pour la navigation par flèches dans la modale
+let currentFilteredList = [];
+let currentModalIndex = -1;
 
-// Récupère la session depuis l'URL (magic link) ou le localStorage
-async function initAuth() {
-  // 1. Vérifier si un token est dans l'URL (retour magic link)
-  const hash = window.location.hash;
-  const params = new URLSearchParams(hash.replace('#', '?'));
-  const accessToken = params.get('access_token');
-  const refreshToken = params.get('refresh_token');
-
-  if (accessToken) {
-    // Nettoyer l'URL
-    history.replaceState(null, '', window.location.pathname);
-    // Stocker les tokens
-    localStorage.setItem('gt7_access_token', accessToken);
-    if (refreshToken) localStorage.setItem('gt7_refresh_token', refreshToken);
-  }
-
-  // 2. Essayer avec le token stocké
-  const storedToken = localStorage.getItem('gt7_access_token');
-  if (storedToken) {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + storedToken }
-      });
-      if (res.ok) {
-        const user = await res.json();
-        currentUser = { id: user.id, email: user.email };
-        onAuthSuccess();
-        return;
-      } else {
-        // Token expiré, essayer de le rafraîchir
-        const refreshed = await refreshSession();
-        if (refreshed) return;
-      }
-    } catch(e) { /* continue */ }
-  }
-
-  // 3. Aucune session valide → afficher l'écran de connexion
-  showAuthScreen();
-}
-
-async function refreshSession() {
-  const refreshToken = localStorage.getItem('gt7_refresh_token');
-  if (!refreshToken) return false;
+// INITIALISATION AU CHARGEMENT
+window.addEventListener('DOMContentLoaded', async () => {
+  updateStaticTranslations();
+  setLang(currentLang);
+  
+  // 1. Charger le fichier JSON des voitures de GT7
   try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: refreshToken })
-    });
-    if (!res.ok) return false;
-    const data = await res.json();
-    localStorage.setItem('gt7_access_token', data.access_token);
-    if (data.refresh_token) localStorage.setItem('gt7_refresh_token', data.refresh_token);
-    const user = data.user;
-    currentUser = { id: user.id, email: user.email };
-    onAuthSuccess();
-    return true;
-  } catch(e) { return false; }
+    const res = await fetch('cars.json');
+    cars = await res.json();
+  } catch (err) {
+    console.error("Erreur lors du chargement de cars.json :", err);
+    // Fallback minimal au cas où
+    cars = [
+      { id: 1, make: "Nissan", name: "GT-R Nismo '17", year: 2017, price: 187000, pp: 620, trans: "4RM", power: 600, weight: 1720, aspiration: "TC", cat: "Routière", country: "Japon", rarity: "normal" },
+      { id: 2, make: "Alpine", name: "A110 Première Édition '17", year: 2017, price: 80000, pp: 530, trans: "FR", power: 252, weight: 1103, aspiration: "TC", cat: "Routière", country: "France", rarity: "normal" }
+    ];
+  }
+
+  // 2. Simuler ou brancher une authentification basique (Magic Link fictif ou Supabase s'il y a lieu)
+  // Pour cet exemple autonome, on va simuler un utilisateur connecté automatiquement en local
+  initLocalAuth();
+});
+
+function initLocalAuth() {
+  // On regarde s'il y a une session simulée
+  let email = localStorage.getItem('gt7_user_email');
+  if (!email) {
+    // Écran de connexion affiché
+    document.getElementById('auth-screen').style.display = 'flex';
+  } else {
+    loginUser(email);
+  }
 }
 
-async function sendMagicLink() {
+function sendMagicLink() {
   const email = document.getElementById('auth-email').value.trim();
-  if (!email || !email.includes('@')) {
-    setAuthMsg('Adresse email invalide.', 'err');
-    return;
-  }
-  const btn = document.getElementById('auth-btn');
-  btn.disabled = true;
-  btn.textContent = 'Envoi en cours…';
-  setAuthMsg('');
-  try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, create_user: true })
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.message || 'Erreur inconnue');
-    }
-    setAuthMsg('✓ Lien envoyé ! Vérifie ta boîte mail.', 'ok');
-    document.getElementById('auth-subtitle').textContent = 'Un lien de connexion a été envoyé à ' + email + '. Clique dessus pour accéder à ton garage.';
-    document.getElementById('auth-form-wrap').style.opacity = '0.4';
-    document.getElementById('auth-form-wrap').style.pointerEvents = 'none';
-  } catch(e) {
-    setAuthMsg('Erreur : ' + e.message, 'err');
-    btn.disabled = false;
-    btn.textContent = 'Envoyer le lien de connexion';
-  }
+  if (!email) return;
+  
+  document.getElementById('auth-msg').innerHTML = "✨ Connexion réussie ! Chargement de ton garage...";
+  setTimeout(() => {
+    localStorage.setItem('gt7_user_email', email);
+    loginUser(email);
+  }, 1000);
 }
 
-function setAuthMsg(msg, type='') {
-  const el = document.getElementById('auth-msg');
-  el.textContent = msg;
-  el.className = 'auth-msg' + (type ? ' ' + type : '');
-}
-
-function showAuthScreen() {
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.getElementById('header-user-bar').style.display = 'none';
-}
-
-function onAuthSuccess() {
+function loginUser(email) {
+  currentUserId = email;
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('header-user-bar').style.display = 'flex';
-  document.getElementById('header-user-email').textContent = currentUser.email;
-  // Mettre à jour les headers Supabase avec le token utilisateur
-  const token = localStorage.getItem('gt7_access_token');
-  SB_HEADERS['Authorization'] = 'Bearer ' + token;
-  loadFromSupabase();
+  document.getElementById('header-user-email').innerText = email;
+
+  // Charger les données utilisateur depuis le localStorage (spécifique à cet email)
+  const savedData = localStorage.getItem(`gt7_garage_${email}`);
+  if (savedData) {
+    userCars = JSON.parse(savedData);
+  } else {
+    userCars = {};
+  }
+
+  // Générer les filtres du panneau latéral et lancer le premier rendu global
+  renderFilters();
+  render();
 }
 
 function signOut() {
-  localStorage.removeItem('gt7_access_token');
-  localStorage.removeItem('gt7_refresh_token');
-  currentUser = null;
-  cars = [];
-  document.getElementById('cars-container').innerHTML = '';
-  // Reset form
-  document.getElementById('auth-email').value = '';
-  document.getElementById('auth-btn').disabled = false;
-  document.getElementById('auth-btn').textContent = 'Envoyer le lien de connexion';
-  document.getElementById('auth-form-wrap').style.opacity = '';
-  document.getElementById('auth-form-wrap').style.pointerEvents = '';
-  document.getElementById('auth-subtitle').textContent = "Connecte-toi avec ton adresse email pour accéder à ton garage. Un lien de connexion te sera envoyé.";
-  setAuthMsg('');
-  showAuthScreen();
+  localStorage.removeItem('gt7_user_email');
+  window.location.reload();
 }
 
-// ── ÉTAT LOCAL ─────────────────────────────────────────────────────────────
-// cars = catalogue fusionné avec l'état de l'utilisateur
-let cars = [];
-let editId = null;
-let activeCategory = null;
-let activeCountry = null;
-let activeRarity = null;
-let activeTrans = null;
-let activeAspiration = null;
-let activeYear = null;
-let activePP = null;
-let activeMake = null;
-let currentView = 'grid';
-let ownedFilter = 'all';
-let currentImgBase64 = null;
-const TOTAL_GT7 = 570;
-
-function showToast(msg, type='info') {
-  let t = document.getElementById('toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'toast';
-    t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:0.5rem 1.2rem;border-radius:8px;font-family:Barlow Condensed,sans-serif;font-size:0.9rem;z-index:9999;transition:opacity 0.3s;pointer-events:none;';
-    document.body.appendChild(t);
+function saveUserDataToStorage() {
+  if (currentUserId) {
+    localStorage.setItem(`gt7_garage_${currentUserId}`, JSON.stringify(userCars));
   }
-  t.textContent = msg;
-  t.style.borderColor = type==='error' ? 'var(--accent2)' : type==='ok' ? 'var(--accent)' : 'var(--border)';
-  t.style.opacity = '1';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.style.opacity = '0', 2500);
 }
 
-// ── CHARGEMENT ─────────────────────────────────────────────────────────────
-async function loadFromSupabase() {
-  showToast(t('toastLoad'));
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/user_states?user_id=eq.${encodeURIComponent(currentUser.id)}&select=car_id,owned,wished,note,img`,
-      { headers: SB_HEADERS }
-    );
-    if (!res.ok) throw new Error(await res.text());
-    const rows = await res.json();
+// ==========================================
+// GÉNÉRATION DYNAMIQUE DES FILTRES (SIDEBAR)
+// ==========================================
+function renderFilters() {
+  // On extrait les valeurs uniques existantes dans notre tableau global de voitures
+  const makes = {};
+  const categories = {};
+  const countries = {};
+  const rarities = {};
+  const aspirations = {};
+  const transmissions = {};
+  const years = {};
+  const pps = {};
 
-    // Indexer les états par car_id
-    const stateMap = {};
-    rows.forEach(r => { stateMap[r.car_id] = r; });
+  cars.forEach(c => {
+    if(c.make) makes[c.make] = (makes[c.make] || 0) + 1;
+    if(c.cat) categories[c.cat] = (categories[c.cat] || 0) + 1;
+    if(c.country) countries[c.country] = (countries[c.country] || 0) + 1;
+    if(c.rarity) rarities[c.rarity] = (rarities[c.rarity] || 0) + 1;
+    if(c.aspiration) aspirations[c.aspiration] = (aspirations[c.aspiration] || 0) + 1;
+    if(c.trans) transmissions[c.trans] = (transmissions[c.trans] || 0) + 1;
+    
+    // Groupement par décennie ou année exacte ? Faisons par tranches d'années simples
+    let yGroup = "Autre";
+    if (c.year < 1970) yGroup = "Avant 1970";
+    else if (c.year < 1980) yGroup = "1970s";
+    else if (c.year < 1990) yGroup = "1980s";
+    else if (c.year < 2000) yGroup = "1990s";
+    else if (c.year < 2010) yGroup = "2000s";
+    else if (c.year < 2020) yGroup = "2010s";
+    else if (c.year >= 2020) yGroup = "2020s";
+    years[yGroup] = (years[yGroup] || 0) + 1;
 
-    // Fusionner catalogue + état utilisateur
-    cars = CATALOGUE.map(c => ({
-      ...addComputedCarFields(c),
-      owned:  stateMap[c.id] ? stateMap[c.id].owned  : false,
-      wished: stateMap[c.id] ? stateMap[c.id].wished : false,
-      note:   stateMap[c.id]?.note || '',
-      img:    stateMap[c.id]?.img  || null,
-    }));
+    // Groupement par tranches de PP
+    let ppGroup = "Sans PP";
+    if (c.pp) {
+      if (c.pp < 400) ppGroup = "< 400 PP";
+      else if (c.pp < 500) ppGroup = "400 - 500";
+      else if (c.pp < 600) ppGroup = "500 - 600";
+      else if (c.pp < 700) ppGroup = "600 - 700";
+      else if (c.pp < 800) ppGroup = "700 - 800";
+      else ppGroup = "> 800 PP";
+    }
+    pps[ppGroup] = (pps[ppGroup] || 0) + 1;
+  });
 
-    showToast(t('toastLoaded'), 'ok');
-  } catch(e) {
-    showToast(t('toastError'), 'error');
-    console.error(e);
-    // Fallback : catalogue sans état
-    cars = CATALOGUE.map(c => ({ ...addComputedCarFields(c), owned: false, wished: false, note: '', img: null }));
+  // 1. MARQUES
+  const makeHtml = Object.entries(makes).sort((a,b) => a[0].localeCompare(b[0])).map(([m, n]) => {
+    return `<button class="filter-btn ${activeMake===m?'active':''}" onclick="filterMake('${m.replace(/'/g, "\\'")}')">${m} <span class="count">${n}</span></button>`;
+  }).join('');
+  
+  document.getElementById('make-filters').innerHTML = 
+    `<button class="filter-btn ${!activeMake?'active':''}" onclick="filterMake('')">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>` + makeHtml;
+  document.getElementById('m-make-filters').innerHTML = 
+    `<button class="filter-btn ${!activeMake?'active':''}" onclick="filterMake('')">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>` + makeHtml;
+
+  // 2. CATEGORIES
+  const catHtml = Object.entries(categories).sort((a,b)=>b[1]-a[1]).map(([cat, n]) => {
+    let labelAffichage = cat; 
+    if (cat === "Routière") {
+      labelAffichage = t('catRoad');
+    } else if (cat === "Course") {
+      labelAffichage = t('catRace');
+    }
+    return `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCategory('${cat}')">${labelAffichage} <span class="count">${n}</span></button>`;
+  }).join('');
+
+  document.getElementById('cat-filters').innerHTML = 
+    `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCategory('')">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>` + catHtml;
+  document.getElementById('m-cat-filters').innerHTML = 
+    `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCategory('')">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>` + catHtml;
+
+  // 3. PAYS
+  const countryHtml = Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([country, n]) => {
+    const mapKeys = {
+      "Japon": "countryJapon",
+      "Italie": "countryItalie",
+      "États-Unis": "countryEtatsUnis",
+      "Allemagne": "countryAllemagne",
+      "Royaume-Uni": "countryRoyaumeUni",
+      "France": "countryFrance",
+      "Corée du Sud": "countryCoree",
+      "Autre": "countryAutre",
+      "Autriche": "countryAutriche",
+      "Suède": "countrySuede"
+    };
+    const translationKey = mapKeys[country] || "countryAutre";
+    const labelPays = t(translationKey) || country;
+    return `<button class="filter-btn ${activeCountry===country?'active':''}" onclick="filterCountry(\"${country}\")">${labelPays} <span class="count">${n}</span></button>`;
+  }).join('');
+
+  document.getElementById('country-filters').innerHTML = 
+    `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + countryHtml;
+  document.getElementById('m-country-filters').innerHTML = 
+    `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + countryHtml;
+
+  // 4. RARETE
+  const rarityHtml = Object.entries(rarities).sort((a,b)=>b[1]-a[1]).map(([r, n]) => {
+    let lbl = r==='legend'? t('rarityLegend') : (r==='special'? t('raritySpecial') : 'Brand Central');
+    return `<button class="filter-btn ${activeRarity===r?'active':''}" onclick="filterRarity('${r}')">${lbl} <span class="count">${n}</span></button>`;
+  }).join('');
+  
+  document.getElementById('rarity-filters').innerHTML = 
+    `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + rarityHtml;
+  document.getElementById('m-rarity-filters').innerHTML = 
+    `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + rarityHtml;
+
+  // 5. ASPIRATION
+  const aspirationHtml = Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp, n]) => {
+    const translationKey = 'form' + asp.replace('+', '');
+    return `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${t(translationKey) || asp} <span class="count">${n}</span></button>`;
+  }).join('');
+
+  document.getElementById('aspiration-filters').innerHTML = 
+    `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + aspirationHtml;
+  document.getElementById('m-aspiration-filters').innerHTML = 
+    `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + aspirationHtml;
+
+  // 6. TRANSMISSION
+  const transHtml = Object.entries(transmissions).sort((a,b)=>b[1]-a[1]).map(([tr, n]) => {
+    return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`;
+  }).join('');
+  
+  document.getElementById('trans-filters').innerHTML = 
+    `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + transHtml;
+  document.getElementById('m-trans-filters').innerHTML = 
+    `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + transHtml;
+
+  // 7. ANNEES
+  const orderY = ["Avant 1970", "1970s", "1980s", "1990s", "2000s", "2010s", "2020s"];
+  const yearHtml = orderY.filter(y => years[y]).map(y => {
+    return `<button class="filter-btn ${activeYear===y?'active':''}" onclick="filterYear('${y}')">${y} <span class="count">${years[y]}</span></button>`;
+  }).join('');
+  
+  document.getElementById('year-filters').innerHTML = 
+    `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + yearHtml;
+  document.getElementById('m-year-filters').innerHTML = 
+    `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + yearHtml;
+
+  // 8. PP
+  const orderPP = ["< 400 PP", "400 - 500", "500 - 600", "600 - 700", "700 - 800", "> 800 PP"];
+  const ppHtml = orderPP.filter(p => pps[p]).map(p => {
+    return `<button class="filter-btn ${activePP===p?'active':''}" onclick="filterPP('${p}')">${p} <span class="count">${pps[p]}</span></button>`;
+  }).join('');
+  
+  document.getElementById('pp-filters').innerHTML = 
+    `<button class="filter-btn ${!activePP?'active':''}" onclick="filterPP('')">${p} ${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + ppHtml;
+  document.getElementById('m-pp-filters').innerHTML = 
+    `<button class="filter-btn ${!activePP?'active':''}" onclick="filterPP('')">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>` + ppHtml;
+
+  // Remplir aussi le datalist "Marques" de la modale d'édition
+  const dl = document.getElementById('makes-list');
+  if(dl) {
+    dl.innerHTML = Object.keys(makes).sort().map(m => `<option value="${m}">`).join('');
   }
+}
+
+// Fonctions de clics pour assigner les filtres
+function filterOwned(val) {
+  activeOwned = val;
+  const btns = ['filter-all-btn', 'filter-owned-btn', 'filter-notowned-btn', 'filter-wish-btn', 'filter-legend-btn',
+                'm-filter-all-btn', 'm-filter-owned-btn', 'm-filter-notowned-btn', 'm-filter-wish-btn', 'm-filter-legend-btn'];
+  btns.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('active');
+  });
+  
+  // Activer boutons desktop + mobile
+  if(val==='all') { document.getElementById('filter-all-btn').classList.add('active'); if(document.getElementById('m-filter-all-btn')) document.getElementById('m-filter-all-btn').classList.add('active'); }
+  if(val==='owned') { document.getElementById('filter-owned-btn').classList.add('active'); if(document.getElementById('m-filter-owned-btn')) document.getElementById('m-filter-owned-btn').classList.add('active'); }
+  if(val==='missing') { document.getElementById('filter-notowned-btn').classList.add('active'); if(document.getElementById('m-filter-notowned-btn')) document.getElementById('m-filter-notowned-btn').classList.add('active'); }
+  if(val==='wishlist') { document.getElementById('filter-wish-btn').classList.add('active'); if(document.getElementById('m-filter-wish-btn')) document.getElementById('m-filter-wish-btn').classList.add('active'); }
+  if(val==='legenda') { document.getElementById('filter-legend-btn').classList.add('active'); if(document.getElementById('m-filter-legend-btn')) document.getElementById('m-filter-legend-btn').classList.add('active'); }
+
   render();
 }
-
-// ── SAUVEGARDE D'UN ÉTAT UTILISATEUR ──────────────────────────────────────
-async function saveCarState(carId) {
-  const c = cars.find(x => x.id === carId);
-  if (!c) return;
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/user_states`, {
-      method: 'POST',
-      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
-      body: JSON.stringify([{
-        user_id: currentUser.id,
-        car_id:  c.id,
-        owned:   c.owned,
-        wished:  c.wished,
-        note:    c.note   || '',
-        img:     c.img    || '',
-      }])
-    });
-    if (!res.ok) throw new Error(await res.text());
-  } catch(e) {
-    showToast(t('toastSaveError'), 'error');
-    console.error(e);
-  }
-}
-
-// Alias pour compatibilité avec le reste du code (saveCar appelle save())
-async function save() {
-  // Sauvegarder tous les états modifiés — utilisé après import/reset
-  const payload = cars.map(c => ({
-    user_id: currentUser.id,
-    car_id:  c.id,
-    owned:   c.owned,
-    wished:  c.wished,
-    note:    c.note  || '',
-    img:     c.img   || '',
-  }));
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/user_states`, {
-      method: 'POST',
-      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates' },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) throw new Error(await res.text());
-  } catch(e) {
-    showToast(t('toastSaveError'), 'error');
-    console.error(e);
-  }
-}
-
-async function deleteFromSupabase(id) {
-  // Dans ce modèle on ne supprime pas une voiture du catalogue,
-  // on remet juste son état à "non obtenue"
-  const idx = cars.findIndex(c => c.id === id);
-  if (idx === -1) return;
-  cars[idx].owned  = false;
-  cars[idx].wished = false;
-  cars[idx].note   = '';
-  cars[idx].img    = null;
-  await saveCarState(id);
-}
-
-function setView(v) {
-  if (window.innerWidth <= 768) v = 'grid';
-  currentView = v;
-  document.getElementById('grid-btn').classList.toggle('active', v==='grid');
-  document.getElementById('list-btn').classList.toggle('active', v==='list');
-  render();
-}
-
-function openDrawer() { document.getElementById('filter-drawer').classList.add('open'); }
-function closeDrawer() { document.getElementById('filter-drawer').classList.remove('open'); }
+function filterMake(v) { activeMake = v; renderFilters(); render(); }
+function filterCategory(v) { activeCategory = v; renderFilters(); render(); }
+function filterCountry(v) { activeCountry = v; renderFilters(); render(); }
+function filterRarity(v) { activeRarity = v; renderFilters(); render(); }
+function filterAspiration(v) { activeAspiration = v; renderFilters(); render(); }
+function filterTrans(v) { activeTrans = v; renderFilters(); render(); }
+function filterYear(v) { activeYear = v; renderFilters(); render(); }
+function filterPP(v) { activePP = v; renderFilters(); render(); }
 
 function onMobileSearch() {
-  const val = document.getElementById('m-search-input').value;
-  document.getElementById('search-input').value = val;
+  document.getElementById('search-input').value = document.getElementById('m-search-input').value;
   render();
 }
 
-function mobileNav(tab) {
-  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('nav-' + tab).classList.add('active');
-  if (tab === 'wish') filterOwned('wishlist');
-  else if (tab === 'garage') filterOwned('all');
-}
-
-function filterOwned(mode) {
-  ownedFilter = mode;
-  // Desktop buttons
-  const da = document.getElementById('filter-all-btn');
-  const do_ = document.getElementById('filter-owned-btn');
-  const dn = document.getElementById('filter-notowned-btn');
-  const dw = document.getElementById('filter-wish-btn');
-  const dl = document.getElementById('filter-legend-btn');
-  if(da) da.classList.toggle('active', mode==='all');
-  if(do_) do_.classList.toggle('active', mode==='owned');
-  if(dn) dn.classList.toggle('active', mode==='missing');
-  if(dw) dw.classList.toggle('active', mode==='wishlist');
-  if(dl) dl.classList.toggle('active', mode==='legenda');
-  // Mobile buttons
-  const ma = document.getElementById('m-filter-all-btn');
-  const mo = document.getElementById('m-filter-owned-btn');
-  const mn = document.getElementById('m-filter-notowned-btn');
-  const mw = document.getElementById('m-filter-wish-btn');
-  const ml = document.getElementById('m-filter-legend-btn');
-  if(ma) ma.classList.toggle('active', mode==='all');
-  if(mo) mo.classList.toggle('active', mode==='owned');
-  if(mn) mn.classList.toggle('active', mode==='missing');
-  if(mw) mw.classList.toggle('active', mode==='wishlist');
-  if(ml) ml.classList.toggle('active', mode==='legenda');
+// ==========================================
+// RENDU DU CONTENU PRINCIPAL & CALCUL STATS
+// ==========================================
+let currentView = 'grid'; // 'grid' ou 'list'
+function setView(view) {
+  currentView = view;
+  document.getElementById('grid-btn').classList.toggle('active', view==='grid');
+  document.getElementById('list-btn').classList.toggle('active', view==='list');
   render();
-}
-
-function getFiltered() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const sort = document.getElementById('sort-select').value;
-  let list = [...cars];
-  if (q) list = list.filter(c => c.name.toLowerCase().includes(q)||(c.make||'').toLowerCase().includes(q));
-  if (activeCategory) list = list.filter(c => c.cat===activeCategory);
-  if (activeCountry) list = list.filter(c => c.country===activeCountry);
-  if (activeRarity) list = list.filter(c => c.rarity===activeRarity);
-  if (activeTrans) list = list.filter(c => c.trans===activeTrans);
-  if (activeAspiration) list = list.filter(c => c.aspiration===activeAspiration);
-  if (activeYear) list = list.filter(c => c.year && Math.floor(c.year / 10) * 10 == activeYear);
-  if (activePP !== null) list = list.filter(c => c.pp && Math.floor(c.pp / 100) * 100 == activePP);
-  if (activeMake) list = list.filter(c => c.make===activeMake);
-  if (ownedFilter==='owned') list = list.filter(c => c.owned!==false);
-  if (ownedFilter==='missing') list = list.filter(c => c.owned===false);
-  if (ownedFilter==='wishlist') list = list.filter(c => c.wished===true);
-  if (ownedFilter==='legenda') list = list.filter(c => isLegendCar(c));
-  list.sort((a,b) => {
-    if (sort==='name') return (a.make+a.name).localeCompare(b.make+b.name);
-    if (sort==='make') return (a.make||'').localeCompare(b.make||'');
-    if (sort==='pp') return (b.pp||0)-(a.pp||0);
-    if (sort==='year') return (b.year||0)-(a.year||0);
-    if (sort==='price') return (b.price||0)-(a.price||0);
-    if (sort==='power') return (b.power||0)-(a.power||0);
-    if (sort==='weight') return (b.weight||0)-(a.weight||0);
-    return 0;
-  });
-  return list;
-}
-
-function fmtNum(n) {
-  if (!n&&n!==0) return '—';
-  if (n>=1000000) return (n/1000000).toFixed(1)+'M';
-  if (n>=1000) return (n/1000).toFixed(0)+'K';
-  return n.toString();
 }
 
 function render() {
-  const list = getFiltered();
   const container = document.getElementById('cars-container');
-  const owned = cars.filter(c=>c.owned!==false);
-  document.getElementById('total-count').textContent = owned.length;
-  document.getElementById('total-value').textContent = fmtNum(owned.reduce((a,c)=>a+(parseInt(c.price)||0),0));
-  const maxPP = owned.length?Math.max(...owned.map(c=>parseInt(c.pp)||0)):0;
-  document.getElementById('max-pp').textContent = maxPP||'—';
-  const maxPower = owned.length ? Math.max(...owned.map(c=>parseInt(c.power)||0)) : 0;
-  document.getElementById('max-ch').textContent = maxPower ? maxPower + " ch" : '—';
-  const maxWeight = owned.length ? Math.max(...owned.map(c=>parseInt(c.weight)||0)) : 0;
-  document.getElementById('max-kg').textContent = maxWeight ? maxWeight + " kg" : '—';
-  const pct = Math.round(owned.length/TOTAL_GT7*100);
-  document.getElementById('progress-pct').textContent = pct+'%';
-  document.getElementById('progress-fill').style.width = Math.min(100,pct)+'%';
-  document.getElementById('progress-count').textContent = owned.length;
-  renderFilters();
-  if (list.length===0) {
-    container.innerHTML = `<div class="empty-state"><div class="big">🏎️</div><p>${cars.length>0?t('emptyFound'):t('emptyNone')}</p></div>`;
+  const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+
+  // 1. Filtrer la liste des voitures
+  let filtered = cars.filter(c => {
+    // Statut possédé / manquant / wishlist / légende
+    const u = userCars[c.id] || {};
+    if (activeOwned === 'owned' && !u.owned) return false;
+    if (activeOwned === 'missing' && u.owned) return false;
+    if (activeOwned === 'wishlist' && !u.wishlist) return false;
+    if (activeOwned === 'legenda' && c.rarity !== 'legend') return false;
+
+    // Panneaux latéraux
+    if (activeMake && c.make !== activeMake) return false;
+    if (activeCategory && c.cat !== activeCategory) return false;
+    if (activeCountry && c.country !== activeCountry) return false;
+    if (activeRarity && c.rarity !== activeRarity) return false;
+    if (activeAspiration && c.aspiration !== activeAspiration) return false;
+    if (activeTrans && c.trans !== activeTrans) return false;
+    
+    // Année tranche
+    if (activeYear) {
+      if (activeYear === "Avant 1970" && c.year >= 1970) return false;
+      if (activeYear === "1970s" && (c.year < 1970 || c.year >= 1980)) return false;
+      if (activeYear === "1980s" && (c.year < 1980 || c.year >= 1990)) return false;
+      if (activeYear === "1990s" && (c.year < 1990 || c.year >= 2000)) return false;
+      if (activeYear === "2000s" && (c.year < 2000 || c.year >= 2010)) return false;
+      if (activeYear === "2010s" && (c.year < 2010 || c.year >= 2020)) return false;
+      if (activeYear === "2020s" && c.year < 2020) return false;
+    }
+
+    // PP tranche
+    if (activePP) {
+      if (!c.pp) return false;
+      if (activePP === "< 400 PP" && c.pp >= 400) return false;
+      if (activePP === "400 - 500" && (c.pp < 400 || c.pp >= 500)) return false;
+      if (activePP === "500 - 600" && (c.pp < 500 || c.pp >= 600)) return false;
+      if (activePP === "600 - 700" && (c.pp < 600 || c.pp >= 700)) return false;
+      if (activePP === "700 - 800" && (c.pp < 700 || c.pp >= 800)) return false;
+      if (activePP === "> 800 PP" && c.pp < 800) return false;
+    }
+
+    // Recherche par texte libre (nom ou marque)
+    if (searchVal) {
+      const target = `${c.make} ${c.name}`.toLowerCase();
+      if (!target.includes(searchVal)) return false;
+    }
+
+    return true;
+  });
+
+  // 2. Trier la liste filtrée
+  const sortBy = document.getElementById('sort-select').value;
+  filtered.sort((a, b) => {
+    if (sortBy === 'name') return a.name.localeCompare(b.name);
+    if (sortBy === 'make') return a.make.localeCompare(b.make);
+    if (sortBy === 'year') return b.year - a.year; // Récent d'abord
+    if (sortBy === 'price') return (b.price || 0) - (a.price || 0);
+    if (sortBy === 'pp') return (b.pp || 0) - (a.pp || 0);
+    if (sortBy === 'power') return (b.power || 0) - (a.power || 0);
+    if (sortBy === 'weight') return (a.weight || 0) - (b.weight || 0); // Léger d'abord
+    return 0;
+  });
+
+  // Sauvegarder pour la navigation de la modale
+  currentFilteredList = filtered;
+
+  // 3. Calculer les statistiques globales du garage (uniquement sur les voitures possédées)
+  let totalCount = 0;
+  let totalValue = 0;
+  let maxPP = 0;
+  let maxCh = 0;
+  let maxKg = 0;
+
+  cars.forEach(c => {
+    const u = userCars[c.id];
+    if (u && u.owned) {
+      totalCount++;
+      totalValue += (c.price || 0);
+      if ((c.pp || 0) > maxPP) maxPP = c.pp;
+      if ((c.power || 0) > maxCh) maxCh = c.power;
+      if ((c.weight || 0) > maxKg) maxKg = c.weight;
+    }
+  });
+
+  // Mettre à jour les compteurs graphiques du header
+  document.getElementById('total-count').innerText = totalCount;
+  document.getElementById('total-value').innerText = totalValue.toLocaleString() + " Cr";
+  document.getElementById('max-pp').innerText = maxPP ? maxPP + " PP" : "—";
+  document.getElementById('max-ch').innerText = maxCh ? maxCh + " ch" : "—";
+  document.getElementById('max-kg').innerText = maxKg ? maxKg + " kg" : "—";
+
+  // Barre de progression de la collection globale
+  const totalUniqueInGame = 570; // Ajustable selon les MàJ
+  const pct = Math.min(100, Math.round((totalCount / totalUniqueInGame) * 100));
+  document.getElementById('progress-pct').innerText = pct + "%";
+  document.getElementById('progress-fill').style.width = pct + "%";
+  document.getElementById('progress-count').innerText = totalCount;
+
+  // 4. Générer le HTML du conteneur principal
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state">Aucune voiture ne correspond à ces critères.</div>`;
     return;
   }
-  container.innerHTML = currentView==='grid'
-    ? `<div class="cars-grid">${list.map(cardHTML).join('')}</div>`
-    : `<div class="cars-list">${list.map(listHTML).join('')}</div>`;
-}
 
-// Logos locaux depuis le dossier logos/
-// Correspondances spéciales pour les noms qui diffèrent
-// Correspondance automatique marque → pays
-const MAKE_TO_COUNTRY = {
-  'daihatsu':'🇯🇵 Japon','honda':'🇯🇵 Japon','infiniti':'🇯🇵 Japon','super formula':'🇯🇵 Japon',
-  'lexus':'🇯🇵 Japon','mazda':'🇯🇵 Japon','mitsubishi':'🇯🇵 Japon','re amemiya':'🇯🇵 Japon',
-  'nissan':'🇯🇵 Japon','subaru':'🇯🇵 Japon','suzuki':'🇯🇵 Japon','toyota':'🇯🇵 Japon',
-  'amuse':'🇯🇵 Japon','nismo':'🇯🇵 Japon','afeela':'🇯🇵 Japon','gran turismo':'🇯🇵 Japon','mine\'s':'🇯🇵 Japon',
-  'audi':'🇩🇪 Allemagne','bmw':'🇩🇪 Allemagne','mercedes':'🇩🇪 Allemagne',
-  'opel':'🇩🇪 Allemagne','porsche':'🇩🇪 Allemagne',
-  'volkswagen':'🇩🇪 Allemagne','amg':'🇩🇪 Allemagne',
-  'ruf':'🇩🇪 Allemagne',
-  'alfa romeo':'🇮🇹 Italie','de tomaso':'🇮🇹 Italie',
-  'ferrari':'🇮🇹 Italie','fiat':'🇮🇹 Italie','lamborghini':'🇮🇹 Italie',
-  'lancia':'🇮🇹 Italie','maserati':'🇮🇹 Italie','pagani':'🇮🇹 Italie','bvlgari':'🇮🇹 Italie',
-  'abarth':'🇮🇹 Italie','zagato':'🇮🇹 Italie','autobianchi':'🇮🇹 Italie','italdesign':'🇮🇹 Italie',
-  'alpine':'🇫🇷 France','citroen':'🇫🇷 France','bugatti':'🇫🇷 France',
-  'ds':'🇫🇷 France','peugeot':'🇫🇷 France','renault':'🇫🇷 France',
-  'aston martin':'🇬🇧 Royaume-Uni','bac':'🇬🇧 Royaume-Uni','radical':'🇬🇧 Royaume-Uni',
-  'jaguar':'🇬🇧 Royaume-Uni',
-  'mclaren':'🇬🇧 Royaume-Uni',
-  'mini':'🇬🇧 Royaume-Uni','tvr':'🇬🇧 Royaume-Uni',
-  'chevrolet':'🇺🇸 États-Unis','chaparral':'🇺🇸 États-Unis','dmc':'🇺🇸 États-Unis','eckert\'s':'🇺🇸 États-Unis',
-  'dodge':'🇺🇸 États-Unis','ford':'🇺🇸 États-Unis','chc':'🇺🇸 États-Unis','greddy':'🇺🇸 États-Unis','garage rcr':'🇺🇸 États-Unis',
-  'jeep':'🇺🇸 États-Unis','pontiac':'🇺🇸 États-Unis','greening auto company':'🇺🇸 États-Unis','plymouth':'🇺🇸 États-Unis',
-  'shelby':'🇺🇸 États-Unis','tesla':'🇺🇸 États-Unis','roadster shop':'🇺🇸 États-Unis','wicked fabrication':'🇺🇸 États-Unis',
-  'volvo':'🇸🇪 Suède','polestar':'🇸🇪 Suède',
-  'hyundai':'🇰🇷 Corée du Sud','genesis':'🇰🇷 Corée du Sud',
-  'skoda':'🇨🇿 République Tchèque',
-  'ktm':'🇦🇹 Autriche',
-  'yangwang':'🇨🇳 Chine','xiaomi':'🇨🇳 Chine',
-};
-function getCountryFromMake(make) {
-  if (!make) return '';
-  return MAKE_TO_COUNTRY[make.toLowerCase().trim()] || '🌍 Autre';
-}
+  container.className = currentView === 'grid' ? 'cars-grid' : 'cars-list';
 
-const BRAND_LOGO_OVERRIDES = {
-  'škoda': 'skoda',
-  'skoda': 'skoda',
-  'mercedes-benz': 'mercedes',
-  'mercedes benz': 'mercedes',
-};
+  container.innerHTML = filtered.map(c => {
+    const u = userCars[c.id] || {};
+    const isOwned = !!u.owned;
+    const isWish = !!u.wishlist;
+    const hasCustomImg = !!u.photo;
+    const currentImgSrc = u.photo || 'placeholder-car.jpg'; // Image par défaut ou base64 locale
 
-function getBrandLogoUrl(make) {
-  if (!make) return null;
-  const key = make.toLowerCase().trim();
-  const mapped = BRAND_LOGO_OVERRIDES[key] || key;
-  return `logos/${mapped}.png`;
-}
+    // Traduction de la rareté sous forme de tag
+    let rarityTag = '';
+    if(c.rarity==='legend') rarityTag = `<span class="badge legend">${t('rarityLegend')}</span>`;
+    if(c.rarity==='special') rarityTag = `<span class="badge special">${t('raritySpecial')}</span>`;
 
-function logoImgTag(make, cls='brand-logo') {
-  const url = getBrandLogoUrl(make);
-  if (!url) return '';
-  return `<img src="${url}" alt="${make}" class="${cls}" onerror="this.style.display='none'">`;
-}
-
-function cardHTML(c) {
-  const isOwned = c.owned!==false;
-  const isWished = c.wished===true;
-  const rc = {normal:'rarity-normal',special:'rarity-special',legend:'rarity-legend'}[c.rarity]||'rarity-normal';
-  const rl = {normal:t('rarityNormal'),special:t('raritySpecialCard'),legend:t('rarityLegendCard')}[c.rarity]||'Standard';
-  // Priorité : photo catalogue → photo utilisateur → emoji
-  const imgSrc = c.img || `photos/${c.id}.jpg`;
-  const imgContent = imgSrc
-    ? `<img src="${imgSrc}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">\
-<span style="font-size:3.5rem;line-height:1;display:none;">${c.emoji||'🚗'}</span>`
-    : `<span style="font-size:3.5rem;line-height:1;">${c.emoji||'🚗'}</span>`;
-  const hasImg = !!imgSrc;
-  return `<div class="car-card${isOwned?'':' not-owned'}${isWished?' wished-card':''}" onclick="openLightbox(${c.id})" style="cursor:${hasImg?'pointer':'default'}">
-    <div class="car-img-wrap">
-      ${imgContent}
-      <button class="owned-toggle${isOwned?' owned':''}" onclick="event.stopPropagation();toggleOwned(${c.id})">${isOwned?'✓':'○'}</button>
-      <button class="wish-btn${isWished?' wished':''}" onclick="event.stopPropagation();toggleWish(${c.id})" title="${isWished?'Retirer de la wishlist':'Ajouter à la wishlist'}">${isWished?'⭐':'☆'}</button>
-      <span class="car-rarity ${rc}">${rl}</span>
-      <div class="wish-banner">⭐ Wishlist</div>
-      ${isLegendCar(c) ? '<span class="legend-badge">🚗</span>' : ''}
-    </div>
-    <div class="car-body">
-      ${logoImgTag(c.make)}
-      <div class="car-make">${c.make||''}</div>
-      <div class="car-name">${c.name}</div>
-      <div class="car-tags">
-        ${c.country?`<span class="tag tag-country">${c.country}</span>`:''}
-        ${c.cat?`<span class="tag tag-cat">${c.cat}</span>`:''}
-        ${c.year?`<span class="tag tag-a">${c.year}</span>`:''}
-        ${c.trans?`<span class="tag tag-b">${c.trans}</span>`:''}
-        ${c.aspiration?`<span class="tag tag-c">${c.aspiration}</span>`:''}
-      </div>
-      <div class="car-stats">
-        <div class="cs-item">
-          <div class="cs-val">${c.pp||'—'}</div>
-          <div class="cs-key">PP</div>
+    if (currentView === 'grid') {
+      return `
+        <div class="car-card ${isOwned?'owned':''}" onclick="openModalById(${c.id})">
+          <div class="card-img-wrap">
+            <img src="${currentImgSrc}" alt="${c.name}" class="car-thumb" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"60\" viewBox=\"0 0 100 60\"><rect width=\"100%\" height=\"100%\" fill=\"%23222\"/><text x=\"50%\" y=\"55%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"%23444\" font-size=\"10\" font-family=\"sans-serif\">Pas de photo</text></svg>'">
+            <div class="card-tags">
+              ${rarityTag}
+              ${c.pp ? `<span class="badge pp">${c.pp} PP</span>` : ''}
+            </div>
+            <div class="card-actions-overlay" onclick="event.stopPropagation();">
+              <button class="action-toggle-btn ${isOwned?'active':''}" onclick="toggleOwnedQuick(${c.id})" title="Possédée ou non">✓</button>
+              <button class="action-toggle-btn star ${isWish?'active':''}" onclick="toggleWishQuick(${c.id})" title="Ajouter à la wishlist">⭐</button>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="car-make">${c.make}</div>
+            <div class="car-name">${c.name}</div>
+            <div class="car-specs">
+              <span>${c.year}</span> · <span>${c.trans || '—'}</span> · <span>${c.power ? c.power+' ch' : '—'}</span>
+            </div>
+            <div class="car-price-row">
+              <span class="price-val">${c.price ? c.price.toLocaleString()+' Cr' : 'Gratuit / Récompense'}</span>
+              ${u.note ? `<span class="note-indicator" title="${u.note.replace(/"/g, '&quot;')}">💬</span>` : ''}
+            </div>
+          </div>
         </div>
-        <div class="cs-item">
-          <div class="cs-val">${c.price || '—'}</div>
-          <div class="cs-key">Cr</div>
+      `;
+    } else {
+      // Vue en liste compacte
+      return `
+        <div class="list-row ${isOwned?'owned':''}" onclick="openModalById(${c.id})">
+          <img src="${currentImgSrc}" alt="" class="list-thumb" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 25\"><rect width=\"100%\" height=\"100%\" fill=\"%23222\"/></svg>'">
+          <div class="list-cell main-cell">
+            <div class="list-car-title"><strong>${c.make}</strong> ${c.name}</div>
+            <div style="font-size:0.75rem;color:var(--muted);">${c.cat} · ${c.country}</div>
+          </div>
+          <div class="list-cell text-center" style="width:70px;"><strong>${c.pp || '—'}</strong> <span style="font-size:0.65rem;color:var(--muted)">PP</span></div>
+          <div class="list-cell text-center" style="width:80px;">${c.power ? c.power+' ch' : '—'}</div>
+          <div class="list-cell text-center" style="width:70px;">${c.weight ? c.weight+' kg' : '—'}</div>
+          <div class="list-cell text-right" style="width:110px; font-weight:600; color:var(--accent); font-family: 'Barlow Condensed';">${c.price ? c.price.toLocaleString() : '—'}</div>
+          <div class="list-cell text-right" style="width:90px;" onclick="event.stopPropagation();">
+            <button class="action-toggle-btn ${isOwned?'active':''}" onclick="toggleOwnedQuick(${c.id})">✓</button>
+            <button class="action-toggle-btn star ${isWish?'active':''}" onclick="toggleWishQuick(${c.id})">⭐</button>
+          </div>
         </div>
-        <div class="cs-item">
-          <div class="cs-val">${c.power || '—'}</div>
-          <div class="cs-key">ch</div>
-        </div>
-        <div class="cs-item">
-          <div class="cs-val">${c.weight || '—'}</div>
-          <div class="cs-key">kg</div>
-        </div>
-      </div>
-      ${c.note?`<div style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;font-style:italic;">${c.note}</div>`:''}
-    </div>
-    <div class="card-actions">
-      <button class="action-btn" onclick="event.stopPropagation();editCar(${c.id})">✏️</button>
-      <button class="action-btn del" onclick="event.stopPropagation();deleteCar(${c.id})">🗑️</button>
-    </div>
-  </div>`;
+      `;
+    }
+  }).join('');
 }
 
-function listHTML(c) {
-  const isOwned = c.owned!==false;
-  const isWished = c.wished===true;
-  const thumb = c.img
-    ? `<img src="${c.img}" alt="${c.name}" style="width:60px;height:40px;object-fit:cover;display:block;">`
-    : `<span style="font-size:1.6rem;">${c.emoji||'🚗'}</span>`;
-  return `<div class="list-row${isOwned?'':' not-owned'}${isWished?' wished-row':''}">
-    <div class="list-thumb">${thumb}</div>
-    <div class="list-info">
-      <div class="list-name" style="display:flex;align-items:center;gap:0.5rem;">${logoImgTag(c.make,'brand-logo-list')}${c.make?c.make+' ':''}${c.name}</div>
-      <div class="list-tags">
-        ${c.country?`<span class="tag tag-country" style="font-size:0.65rem;padding:1px 6px;">${c.country}</span>`:''}
-        ${c.cat?`<span class="tag tag-cat" style="font-size:0.65rem;padding:1px 6px;">${c.cat}</span>`:''}
-        ${c.year?`<span class="tag tag-a" style="font-size:0.65rem;padding:1px 6px;">${c.year}</span>`:''}
-        ${c.trans?`<span class="tag tag-b" style="font-size:0.65rem;padding:1px 6px;">${c.trans}</span>`:''}
-        ${c.aspiration?`<span class="tag tag-c" style="font-size:0.65rem;padding:1px 6px;">${c.aspiration}</span>`:''}
-      </div>
-    </div>
-    <div class="list-stats">
-      <div><div class="ls-val">${c.pp||'—'}</div><div class="ls-key">PP</div></div>
-      <div><div class="ls-val">${fmtNum(parseInt(c.price)||0)}</div><div class="ls-key">Cr</div></div>
-      <div><div class="ls-val">${fmtNum(parseInt(c.power)||0)}</div><div class="cs-key">ch</div></div>
-      <div><div class="ls-val">${fmtNum(parseInt(c.weight)||0)}</div><div class="cs-key">kg</div></div>
-    </div>
-    <div class="list-actions">
-      <button class="action-btn" onclick="toggleOwned(${c.id})" title="${isOwned?'Marquer comme non obtenue':'Marquer comme obtenue'}" style="font-size:0.8rem;${isOwned?'color:var(--accent);border-color:var(--accent);':''}">${isOwned?'✓':'○'}</button>
-      <button class="action-btn" onclick="toggleWish(${c.id})" title="${isWished?'Retirer de la wishlist':'Ajouter à la wishlist'}" style="font-size:0.8rem;${isWished?'color:#f5a623;border-color:#f5a623;':''}">⭐</button>
-      <button class="action-btn" onclick="editCar(${c.id})">✏️</button>
-      <button class="action-btn del" onclick="deleteCar(${c.id})">🗑️</button>
-    </div>
-  </div>`;
-}
-
-function renderFilters() {
-  const labels = {
-    'legend': t('rarityLegendCard'),
-    'special': t('raritySpecialCard'),
-    'normal': t('rarityNormal')
-  };
-  const rarities={};
-  cars.forEach(c=>{ if(c.rarity) rarities[c.rarity]=(rarities[c.rarity]||0)+1; });
-  function makeRarityHTML(prefix) {
-    const el = document.getElementById(prefix+'rarity-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(rarities).sort((a,b)=>b[1]-a[1]).map(([ra,n])=>{
-        const rarityName = labels[ra] || ra;
-        return `<button class="filter-btn ${activeRarity===ra?'active':''}" onclick="filterRarity('${ra}')">${rarityName} <span class="count">${n}</span></button>`;
-      }).join('');
-  }
-  makeRarityHTML(''); makeRarityHTML('m-');
-
-  const aspirations={};
-  cars.forEach(c=>{ if(c.aspiration) aspirations[c.aspiration]=(aspirations[c.aspiration]||0)+1; });
-  function makeAspirationHTML(prefix) {
-    const el = document.getElementById(prefix+'aspiration-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp,n])=>{
-        const translationKey = 'form' + asp.replace('+', '');
-        return `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${t(translationKey) || asp} <span class="count">${n}</span></button>`;
-        }).join('');  }
-  makeAspirationHTML(''); makeAspirationHTML('m-');
-
-  const transs={};
-  cars.forEach(c=>{ if(c.trans) transs[c.trans]=(transs[c.trans]||0)+1; });
-  function makeTransHTML(prefix) {
-    const el = document.getElementById(prefix+'trans-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>{
-        const translationKey1 = 'form4RM';
-        return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterAspiration('${tr}')">${t(translationKey1) || tr} <span class="count">${n}</span></button>`;
-        }).join('');  }  
-  makeTransHTML(''); makeTransHTML('m-');
-
-  const years={};
-  cars.forEach(c=>{ if(c.year){ const d=Math.floor(c.year/10)*10; years[d]=(years[d]||0)+1; }});
-  function makeYearHTML(prefix) {
-    const el = document.getElementById(prefix+'year-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(years).sort((a,b)=>b[0]-a[0]).map(([ye,n])=>
-        `<button class="filter-btn ${activeYear==ye?'active':''}" onclick="filterYear(${ye})">${ye}s <span class="count">${n}</span></button>`).join('');
-  }
-  makeYearHTML(''); makeYearHTML('m-');
-
-  const PPs={};
-  cars.forEach(c=>{ if(c.pp){ const r=Math.floor(c.pp/100)*100; PPs[r]=(PPs[r]||0)+1; }});
-  function makePPHTML(prefix) {
-    const el = document.getElementById(prefix+'pp-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(PPs).sort((a,b)=>b[0]-a[0]).map(([pp,n])=>
-        `<button class="filter-btn ${activePP==pp?'active':''}" onclick="filterPP(${pp})">${pp} - ${parseInt(pp)+99} <span class="count">${n}</span></button>`).join('');
-  }
-  makePPHTML(''); makePPHTML('m-');
-  const makes2={};
-  cars.forEach(c=>{ if(c.make) makes2[c.make]=(makes2[c.make]||0)+1; });
-  function makeMakeHTML(prefix) {
-    const el = document.getElementById(prefix+'make-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeMake?'active':''}" data-make="">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(makes2).sort((a,b)=>a[0].localeCompare(b[0])).map(([mk,n])=>
-        `<button class="filter-btn ${activeMake===mk?'active':''}" data-make="${mk.replace(/"/g,'&quot;')}">${mk} <span class="count">${n}</span></button>`).join('');
-    el.querySelectorAll('[data-make]').forEach(btn => {
-      btn.addEventListener('click', () => { activeMake = btn.dataset.make || null; render(); });
-    });
-  }
-  makeMakeHTML(''); makeMakeHTML('m-');
-
-  function makeCatHTML(prefix) {
-    const cats={};
-    cars.forEach(c=>{ if(c.cat) cats[c.cat]=(cats[c.cat]||0)+1; });
-    const el = document.getElementById(prefix+'cat-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>{
-        let labelAffichage = cat;
-        if (cat === "Routière") {
-          labelAffichage = t('catRoad');
-        } else if (cat === "Course") {
-          labelAffichage = t('catRace');
-        }
-        return `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCategory('${cat}')">${labelAffichage} <span class="count">${n}</span></button>`;
-}).join('');
-  makeCatHTML(''); makeCatHTML('m-');
-
-  function makeCountryHTML(prefix) {
-    const countries={};
-    cars.forEach(c=>{ if(c.country) countries[c.country]=(countries[c.country]||0)+1; });
-    const el = document.getElementById(prefix+'country-filters');
-    if (!el) return;
-    el.innerHTML =
-      `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>{
-        const cleanKey = "country" + ct
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-        .replace(/[^a-zA-Z0-9]/g, "");
-        const translationKey = mapKeys[ct] || cleanKey;
-        const labelPays = t(translationKey) || ct;
-        return `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${labelPays} <span class="count">${n}</span></button>`;
-}).join('');
-  makeCountryHTML(''); makeCountryHTML('m-');
-
-  const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
-  document.getElementById('makes-list').innerHTML = makes.map(m=>`<option value="${m}">`).join('');
-}
-
-function filterCat(cat) { activeCategory=cat; render(); }
-function filterCountry(ct) { activeCountry=ct; render(); }
-function filterRarity(ra) { activeRarity=ra; render(); }
-function filterTrans(tr) { activeTrans=tr; render(); }
-function filterAspiration(asp) { activeAspiration=asp; render(); }
-function filterYear(ye) { activeYear=ye; render(); }
-function filterPP(pp) { activePP=pp; render(); }
-
-async function toggleOwned(id) {
-  const idx = cars.findIndex(c=>c.id===id);
-  if (idx===-1) return;
-  cars[idx].owned = cars[idx].owned===false ? true : false;
+// Actions rapides sur les cartes sans ouvrir la modale
+function toggleOwnedQuick(id) {
+  if(!userCars[id]) userCars[id] = { owned: false, wishlist: false, photo: null, note: "" };
+  userCars[id].owned = !userCars[id].owned;
+  if(userCars[id].owned) userCars[id].wishlist = false; // Plus besoin d'être en wishlist si obtenue
+  saveUserDataToStorage();
   render();
-  await saveCarState(id);
 }
 
-async function toggleWish(id) {
-  const idx = cars.findIndex(c=>c.id===id);
-  if (idx===-1) return;
-  cars[idx].wished = !cars[idx].wished;
+function toggleWishQuick(id) {
+  if(!userCars[id]) userCars[id] = { owned: false, wishlist: false, photo: null, note: "" };
+  userCars[id].wishlist = !userCars[id].wishlist;
+  if(userCars[id].wishlist) userCars[id].owned = false; // Inversement
+  saveUserDataToStorage();
   render();
-  await saveCarState(id);
 }
 
-function filterMake(mk) { activeMake=mk; render(); }
+// ==========================================
+// PANNEAU MOBILE (DRAWER) & NAVIGATION
+// ==========================================
+function openDrawer() {
+  document.getElementById('filter-drawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('filter-drawer').classList.remove('open');
+}
+function mobileNav(screen) {
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+  if(screen==='garage') {
+    document.getElementById('nav-garage').classList.add('active');
+    filterOwned('all');
+  } else if(screen==='wish') {
+    document.getElementById('nav-wish').classList.add('active');
+    filterOwned('wishlist');
+  }
+}
 
-/* IMAGE UPLOAD */
-function triggerImgUpload() { document.getElementById('f-img-input').click(); }
+// ==========================================
+// GESTION DE LA MODALE D'ÉDITION AVANCÉE
+// ==========================================
+let currentEditingCarId = null;
+
+function openModalById(id) {
+  currentEditingCarId = id;
+  const c = cars.find(car => car.id === id);
+  if(!c) return;
+
+  // Calculer l'index actuel dans la liste filtrée pour afficher la pagination
+  currentModalIndex = currentFilteredList.findIndex(car => car.id === id);
+  if(currentModalIndex !== -1 && currentFilteredList.length > 1) {
+    document.getElementById('modal-nav').style.display = 'flex';
+    document.getElementById('modal-nav-count').innerText = `${currentModalIndex + 1} / ${currentFilteredList.length}`;
+  } else {
+    document.getElementById('modal-nav').style.display = 'none';
+  }
+
+  // Charger les données utilisateur
+  const u = userCars[id] || { owned: false, wishlist: false, photo: null, note: "" };
+
+  // Titre de la modale
+  document.getElementById('modal-title').innerHTML = `${c.make} <span>${c.name}</span>`;
+
+  // Remplir le formulaire (en lecture ou pré-remplissage)
+  document.getElementById('f-make').value = c.make || '';
+  document.getElementById('f-name').value = c.name || '';
+  document.getElementById('f-year').value = c.year || '';
+  document.getElementById('f-price').value = c.price || '';
+  document.getElementById('f-pp').value = c.pp || '';
+  document.getElementById('f-trans').value = c.trans || '';
+  document.getElementById('f-power').value = c.power || '';
+  document.getElementById('f-weight').value = c.weight || '';
+  document.getElementById('f-aspiration').value = c.aspiration || '';
+  document.getElementById('f-cat').value = c.cat || '';
+  document.getElementById('f-rarity').value = c.rarity || 'normal';
+  document.getElementById('f-note').value = u.note || '';
+
+  // Gestion de la preview d'image custom
+  const previewWrap = document.getElementById('img-preview-wrap');
+  const placeholder = document.getElementById('img-placeholder');
+  const imgEl = document.getElementById('img-preview');
+
+  if(u.photo) {
+    imgEl.src = u.photo;
+    previewWrap.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    imgEl.src = '';
+    previewWrap.style.display = 'none';
+    placeholder.style.display = 'flex';
+  }
+
+  // Ouvrir la modale graphiquement
+  document.getElementById('modal-bg').classList.add('open');
+  // Écoute des touches du clavier pour naviguer
+  window.addEventListener('keydown', handleModalKeyDown);
+}
+
+function closeModal(e) {
+  // Si e est fourni, fermer seulement si clic sur le background gris
+  if(e && e.target !== document.getElementById('modal-bg')) return;
+  
+  document.getElementById('modal-bg').classList.remove('open');
+  window.removeEventListener('keydown', handleModalKeyDown);
+}
+
+function modalNavigate(direction) {
+  if(currentModalIndex === -1) return;
+  let newIndex = currentModalIndex + direction;
+  
+  // Boucler si on dépasse les bornes
+  if(newIndex < 0) newIndex = currentFilteredList.length - 1;
+  if(newIndex >= currentFilteredList.length) newIndex = 0;
+  
+  openModalById(currentFilteredList[newIndex].id);
+}
+
+function handleModalKeyDown(e) {
+  if(e.key === 'ArrowLeft') {
+    modalNavigate(-1);
+  } else if(e.key === 'ArrowRight') {
+    modalNavigate(1);
+  } else if(e.key === 'Escape') {
+    closeModal();
+  }
+}
+
+// Enregistrement des notes ou modification (si tu permets de modifier les fiches de base)
+function saveCar() {
+  if(!currentEditingCarId) return;
+  
+  if(!userCars[currentEditingCarId]) {
+    userCars[currentEditingCarId] = { owned: true, wishlist: false, photo: null, note: "" };
+  }
+  
+  // Par défaut, si on clique sur Enregistrer dans la modale, on considère la voiture possédée
+  userCars[currentEditingCarId].owned = true;
+  userCars[currentEditingCarId].wishlist = false;
+  userCars[currentEditingCarId].note = document.getElementById('f-note').value.trim();
+  
+  // Optionnel : On pourrait aussi modifier le tableau global 'cars' si l'utilisateur a édité les PP ou ch.
+  const c = cars.find(car => car.id === currentEditingCarId);
+  if(c) {
+    c.make = document.getElementById('f-make').value;
+    c.name = document.getElementById('f-name').value;
+    c.year = parseInt(document.getElementById('f-year').value) || c.year;
+    c.price = parseInt(document.getElementById('f-price').value) || c.price;
+    c.pp = parseInt(document.getElementById('f-pp').value) || c.pp;
+    c.trans = document.getElementById('f-trans').value;
+    c.power = parseInt(document.getElementById('f-power').value) || c.power;
+    c.weight = parseInt(document.getElementById('f-weight').value) || c.weight;
+    c.aspiration = document.getElementById('f-aspiration').value;
+    c.cat = document.getElementById('f-cat').value;
+    c.rarity = document.getElementById('f-rarity').value;
+  }
+
+  saveUserDataToStorage();
+  renderFilters();
+  render();
+  closeModal();
+}
+
+// ==========================================
+// ENREGISTREMENT PHOTO LOCALE (BASE64)
+// ==========================================
+function triggerImgUpload() {
+  document.getElementById('f-img-input').click();
+}
 
 function handleImgUpload(event) {
   const file = event.target.files[0];
-  if (!file) return;
+  if(!file) return;
+
+  // Compresser et lire le fichier en tant que DataURL (Base64)
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = function(e) {
     const img = new Image();
-    img.onload = () => {
+    img.onload = function() {
+      // Redimensionnement via un canvas pour limiter le stockage local à ~150-200kb max par image
       const canvas = document.createElement('canvas');
-      const maxW = 900, maxH = 500;
-      let w = img.width, h = img.height;
-      if (w > maxW) { h = Math.round(h*maxW/w); w = maxW; }
-      if (h > maxH) { w = Math.round(w*maxH/h); h = maxH; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      currentImgBase64 = canvas.toDataURL('image/jpeg', 0.82);
-      showImgPreview(currentImgBase64);
+      let width = img.width;
+      let height = img.height;
+      const MAX_WIDTH = 800; // Largeur max suffisante pour le web
+      
+      if (width > MAX_WIDTH) {
+        height *= MAX_WIDTH / width;
+        width = MAX_WIDTH;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Conversion en JPEG compressé à 0.7
+      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+      
+      // Injection dans la structure locale
+      if(!userCars[currentEditingCarId]) {
+        userCars[currentEditingCarId] = { owned: true, wishlist: false, photo: null, note: "" };
+      }
+      userCars[currentEditingCarId].photo = compressedBase64;
+      
+      // Mise à jour de l'affichage de l'aperçu dans la modale
+      document.getElementById('img-preview').src = compressedBase64;
+      document.getElementById('img-preview-wrap').style.display = 'block';
+      document.getElementById('img-placeholder').style.display = 'none';
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
-  event.target.value = '';
 }
 
-function showImgPreview(src) {
-  document.getElementById('img-preview').src = src;
-  document.getElementById('img-preview-wrap').classList.add('visible');
-  document.getElementById('img-placeholder').style.display = 'none';
-  document.getElementById('img-upload-zone').classList.add('has-image');
-}
-
-function clearImgPreview() {
+function removeImg() {
+  if(currentEditingCarId && userCars[currentEditingCarId]) {
+    userCars[currentEditingCarId].photo = null;
+  }
   document.getElementById('img-preview').src = '';
-  document.getElementById('img-preview-wrap').classList.remove('visible');
-  document.getElementById('img-placeholder').style.display = '';
-  document.getElementById('img-upload-zone').classList.remove('has-image');
+  document.getElementById('img-preview-wrap').style.display = 'none';
+  document.getElementById('img-placeholder').style.display = 'flex';
+  document.getElementById('f-img-input').value = ''; // Reset input file
 }
 
-function removeImg() { currentImgBase64 = null; clearImgPreview(); }
-
-/* MODAL */
-function openModal(id=null) {
-  editId = id;
-  currentImgBase64 = null;
-  clearImgPreview();
-  const navEl = document.getElementById('modal-nav');
-  if (id !== null) {
-    const c = cars.find(x=>x.id===id);
-    document.getElementById('modal-title').innerHTML = 'Modifier la <span>voiture</span>';
-    document.getElementById('f-make').value = c.make||'';
-    document.getElementById('f-name').value = c.name||'';
-    document.getElementById('f-year').value = c.year||'';
-    document.getElementById('f-pp').value = c.pp||'';
-    document.getElementById('f-price').value = c.price||'';
-    document.getElementById('f-aspiration').value = c.aspiration||'';
-    document.getElementById('f-cat').value = c.cat||'';
-    document.getElementById('f-rarity').value = c.rarity||'';
-    document.getElementById('f-note').value = c.note||'';
-    document.getElementById('f-trans').value = c.trans||'';
-    document.getElementById('f-power').value = c.power||'';
-    document.getElementById('f-weight').value = c.weight||'';
-    if (c.img && c.img.startsWith('data:')) { currentImgBase64=c.img; showImgPreview(c.img); }
-    // Flèches de navigation
-    const list = getFiltered();
-    const idx = list.findIndex(x => x.id === id);
-    navEl.style.display = 'flex';
-    document.getElementById('modal-nav-count').textContent = `${idx+1} / ${list.length}`;
-    document.getElementById('modal-prev').disabled = idx <= 0;
-    document.getElementById('modal-next').disabled = idx >= list.length - 1;
-  } else {
-    document.getElementById('modal-title').innerHTML = 'Ajouter une <span>voiture</span>';
-    ['f-make','f-name','f-year','f-pp','f-price','f-note','f-power','f-weight'].forEach(fid=>document.getElementById(fid).value='');
-    document.getElementById('f-aspiration').value='';
-    document.getElementById('f-cat').value='';
-    document.getElementById('f-rarity').value='';
-    document.getElementById('f-trans').value='';
-    navEl.style.display = 'none';
-  }
-  document.getElementById('modal-bg').classList.add('open');
-  setTimeout(()=>document.getElementById('f-make').focus(),100);
-}
-
-async function modalNavigate(direction) {
-  // Sauvegarde silencieuse avant de naviguer
-  if (editId !== null) {
-    const name = document.getElementById('f-name').value.trim();
-    if (name) {
-      const make = document.getElementById('f-make').value.trim();
-      const idx = cars.findIndex(c => c.id === editId);
-      if (idx !== -1) {
-        cars[idx] = {
-          ...cars[idx],
-          make, name,
-          year:       parseInt(document.getElementById('f-year').value)||null,
-          pp:         parseInt(document.getElementById('f-pp').value)||null,
-          price:      parseInt(document.getElementById('f-price').value)||null,
-          country:    getCountryFromMake(make),
-          cat:        document.getElementById('f-cat').value,
-          rarity:     document.getElementById('f-rarity').value,
-          note:       document.getElementById('f-note').value.trim(),
-          trans:      document.getElementById('f-trans').value,
-          power:      document.getElementById('f-power').value,
-          weight:     document.getElementById('f-weight').value,
-          aspiration: document.getElementById('f-aspiration').value,
-          img:        currentImgBase64 || cars[idx].img || null,
-          owned:      cars[idx].owned,
-        };
-        saveCarState(editId); // sans await, silencieux
-      }
-    }
-  }
-  const list = getFiltered();
-  const curIdx = list.findIndex(c => c.id === editId);
-  const newIdx = curIdx + direction;
-  if (newIdx < 0 || newIdx >= list.length) return;
-  openModal(list[newIdx].id);
-}
-
-function closeModal(e) {
-  if (!e||e.target===document.getElementById('modal-bg'))
-    document.getElementById('modal-bg').classList.remove('open');
-}
-
-async function saveCar() {
-  const name = document.getElementById('f-name').value.trim();
-  if (!name) { document.getElementById('f-name').focus(); return; }
-  const make = document.getElementById('f-make').value.trim();
-
-  if (editId !== null) {
-    const idx = cars.findIndex(c => c.id === editId);
-    if (idx !== -1) {
-      cars[idx] = {
-        ...cars[idx],
-        make, name,
-        year:       parseInt(document.getElementById('f-year').value)||null,
-        pp:         parseInt(document.getElementById('f-pp').value)||null,
-        price:      parseInt(document.getElementById('f-price').value)||null,
-        country:    getCountryFromMake(make),
-        cat:        document.getElementById('f-cat').value,
-        rarity:     document.getElementById('f-rarity').value,
-        note:       document.getElementById('f-note').value.trim(),
-        trans:      document.getElementById('f-trans').value,
-        power:      document.getElementById('f-power').value,
-        weight:     document.getElementById('f-weight').value,
-        aspiration: document.getElementById('f-aspiration').value,
-        img:        currentImgBase64 || cars[idx].img || null,
-        owned:      cars[idx].owned, // <-- CORRECTION : on conserve l'état actuel
-      };
-      closeModal();
-      showToast(t('toastSaving'));
-      await saveCarState(editId);
-      showToast(t('toastUpdated'), 'ok');
-      render();
-    }
-  } else {
-    // Nouvelle voiture hors catalogue
-    const newId = Math.max(...cars.map(c => c.id), 1000) + 1;
-    const newCar = {
-      id: newId, make, name,
-      year:       parseInt(document.getElementById('f-year').value)||null,
-      pp:         parseInt(document.getElementById('f-pp').value)||null,
-      price:      parseInt(document.getElementById('f-price').value)||null,
-      country:    getCountryFromMake(make),
-      cat:        document.getElementById('f-cat').value,
-      rarity:     document.getElementById('f-rarity').value,
-      emoji:      getCarEmoji({ cat: document.getElementById('f-cat').value }),
-      note:       document.getElementById('f-note').value.trim(),
-      trans:      document.getElementById('f-trans').value,
-      power:      document.getElementById('f-power').value,
-      weight:     document.getElementById('f-weight').value,
-      aspiration: document.getElementById('f-aspiration').value,
-      img:        currentImgBase64 || null,
-      owned:      true, // <-- CORRECTION : on la marque comme obtenue par défaut
-      wished:     false,
-    };
-    cars.push(newCar);
-    closeModal();
-    showToast(t('toastSaving'));
-    await saveCarState(newId);
-    showToast('✓ Voiture ajoutée', 'ok');
-    render();
-  }
-}
-
-function editCar(id) { openModal(id); }
-
-async function deleteCar(id) {
-  // Dans le nouveau modèle : reset de l'état au lieu de supprimer du catalogue
-  const c = cars.find(x => x.id === id);
-  if (!c) return;
-  // Voitures hors catalogue (id > 1000) : on les retire vraiment
-  if (id > 1000) {
-    if (!confirm(t('confirmDelete'))) return;
-    cars = cars.filter(x => x.id !== id);
-    showToast(t('toastDeleting'));
-    await deleteFromSupabase(id);
-    showToast(t('toastDeleted'), 'ok');
-  } else {
-    // Voiture du catalogue : reset état seulement
-    if (!confirm(t('deleteReset'))) return;
-    await deleteFromSupabase(id); // remet owned=false, wished=false, note='', img=null
-    showToast(t('toastReset'), 'ok');
-  }
-  render();
-}
-
-/* LIGHTBOX */
-function openLightbox(id) {
-  const c = cars.find(x=>x.id===id);
-  if (!c) return;
-  const src = c.catalogImg ? `photos/${c.catalogImg}` : c.img;
-  if (!src) return;
+// ==========================================
+// LIGHTBOX POUR AGRANDISSEMENT PHOTO (OPTIONNEL)
+// ==========================================
+function openLightbox(src, name) {
   document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox-name').textContent = (c.make?c.make+' ':'')+c.name;
+  document.getElementById('lightbox-name').innerText = name;
   document.getElementById('lightbox').classList.add('open');
 }
-function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
-document.addEventListener('keydown', e => {
-  if (e.key==='Escape') { closeLightbox(); closeModal(); }
-  if (document.getElementById('modal-bg').classList.contains('open') && editId !== null) {
-    if (e.key==='ArrowLeft') modalNavigate(-1);
-    if (e.key==='ArrowRight') modalNavigate(1);
-  }
-});
-
-function isLegendCar(c) {
-  const LEGEND_CAR_IDS = [149,15,19,328,354,262,333,184];
-  return LEGEND_CAR_IDS.includes(c.id);
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
 }
-
-/* INIT */
-async function initApp() {
-  try {
-    await loadCatalogue();
-  } catch (e) {
-    console.error(e);
-    showToast('❌ Impossible de charger cars.json', 'error');
-    return;
-  }
-  applyLang();
-  initAuth();
-}
-
-initApp();}}
