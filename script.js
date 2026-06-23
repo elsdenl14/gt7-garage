@@ -450,7 +450,7 @@ function filterOwned(mode) {
   if(do_) do_.classList.toggle('active', mode==='owned');
   if(dn) dn.classList.toggle('active', mode==='missing');
   if(dw) dw.classList.toggle('active', mode==='wishlist');
-  if(dl) dl.classList.toggle('active', mode==='legend');
+  if(dl) dl.classList.toggle('active', mode==='legenda');
   // Mobile buttons
   const ma = document.getElementById('m-filter-all-btn');
   const mo = document.getElementById('m-filter-owned-btn');
@@ -461,7 +461,7 @@ function filterOwned(mode) {
   if(mo) mo.classList.toggle('active', mode==='owned');
   if(mn) mn.classList.toggle('active', mode==='missing');
   if(mw) mw.classList.toggle('active', mode==='wishlist');
-  if(ml) ml.classList.toggle('active', mode==='legend');
+  if(ml) ml.classList.toggle('active', mode==='legenda');
   render();
 }
 
@@ -481,7 +481,7 @@ function getFiltered() {
   if (ownedFilter==='owned') list = list.filter(c => c.owned!==false);
   if (ownedFilter==='missing') list = list.filter(c => c.owned===false);
   if (ownedFilter==='wishlist') list = list.filter(c => c.wished===true);
-  if (ownedFilter==='legend') list = list.filter(c => c.rarity === 'legend');
+  if (ownedFilter==='legenda') list = list.filter(c => c.rarity === 'legenda');
   list.sort((a,b) => {
     if (sort==='name') return (a.make+a.name).localeCompare(b.make+b.name);
     if (sort==='make') return (a.make||'').localeCompare(b.make||'');
