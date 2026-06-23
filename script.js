@@ -7,7 +7,11 @@ const LANGS = {
   fr: {
     // Header
     statOwned:'Obtenues', statCr:'Cr total', statPP:'PP max', statPower:'Puissance max', statWeight:'Poids max',
-    collection:'Collection GT7', progressOf:'/ 570 voitures', btnAdd:'+ Ajouter',
+    collection:'Collection GT7', progressOf:'/ 570 voitures', signout:'Déconnexion',
+
+    //connexion
+    authSubtitle:'Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.',
+    sendMagicLink:'Envoyer le lien de connexion',
     // Sidebar
     filterStatus:'Statut', filterAll:'Toutes', filterOwned:'✓ Obtenues', filterMissing:'○ Manquantes', filterWish:'⭐ Wishlist',
     filterLegend:'🚗 Voitures de légende', filterSearch:'Recherche', searchPlaceholder:'Nom, marque…',
@@ -53,7 +57,12 @@ const LANGS = {
   en: {
     // Header
     statOwned:'Owned', statCr:'Total Cr', statPP:'Max PP', statPower:'Max Power', statWeight:'Max Weight',
-    collection:'GT7 Collection', progressOf:'/ 570 cars', btnAdd:'+ Add',
+    collection:'GT7 Collection', progressOf:'/ 570 cars', signout:'Sign out',
+
+    // Connexion
+    authSubtitle:'Connect with your email address to access your garage.<br>A connection link will be sent to you.',
+    sendMagicLink:'Send connection link',
+
     // Sidebar
     filterStatus:'Status', filterAll:'All', filterOwned:'✓ Owned', filterMissing:'○ Missing', filterWish:'⭐ Wishlist',
     filterLegend:'🚗 Legend Cars', filterSearch:'Search', searchPlaceholder:'Name, brand…',
