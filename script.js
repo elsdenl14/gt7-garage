@@ -32,9 +32,9 @@ const LANGS = {
     formNote:'Note perso (optionnel)', formNotePh:'ex: Voiture préférée !',
     formSelect:'— Sélectionner —', formOwned:'Voiture obtenue', formNA:'NA — Atmosphérique', formTC:'TC — Turbo', 
     formSC:'SC — Compresseur', formVE:'VE — Électrique', formTCSC:'TC+SC — Turbo + Compresseur', form4RM:'4RM',
-    formJapon:'🇯🇵 Japon', formItalie:'🇮🇹 Italie', formAllemagne:'🇩🇪 Allemagne', formUSA:'🇺🇸 États-Unis', formRoyaumeUni:'🇬🇧 Royaume-Uni',
-    formFrance:'🇫🇷 France', formSuede:'🇸🇪 Suède', formAutriche:'🇦🇹 Autriche', formCoréeduSud:'🇰🇷 Corée du Sud', formAutre:'🌍 Autre', 
-    formTchéquie:'🇨🇿 République Tchèque', formChine:'🇨🇳 Chine',
+    countryJapon: "🇯🇵 Japon", countryItalie: "🇮🇹 Italie", countryEtatsUnis: "🇺🇸 États-Unis", countryAllemagne: "🇩🇪 Allemagne", countryRoyaumeUni: "🇬🇧 Royaume-Uni",
+    countryFrance: "🇫🇷 France", countryCoree: "🇰🇷 Corée du Sud", countryAutre: "🌍 Autre", countryAutriche: "🇦🇹 Autriche", countrySuede: "🇸🇪 Suède",
+    countryTchéquie: "🇨🇿 République Tchèque", countryChine: "🇨🇳 Chine",
     btnCancel:'Annuler', btnSave:'Enregistrer',
     catRoad:'Routière', catRace:'Course',
     raritySpecial:"Voitures d'Occasion", rarityLegend:'Voitures de Légende',
@@ -87,9 +87,9 @@ const LANGS = {
     formNote:'Personal note (optional)', formNotePh:'e.g. My favourite car!',
     formSelect:'— Select —', formOwned:'Car obtained', formNA:'NA — Naturally aspirated', formTC:'TC — Turbo', 
     formSC:'SC — Supercharged', formVE:'VE — Electric', formTCSC:'TC+SC — Turbo + Supercharged', form4RM:'4WD',
-    formJapon:'🇯🇵 Japan', formItalie:'🇮🇹 Italy', formAllemagne:'🇩🇪 Germany', formUSA:'🇺🇸 United States', formRoyaumeUni:'🇬🇧 United Kingdom',
-    formFrance:'🇫🇷 France', formSuede:'🇸🇪 Sweden', formAutriche:'🇦🇹 Austria', formCoréeduSud:'🇰🇷 South Korea', formAutre:'🌍 Other', 
-    formTchéquie:'🇨🇿 Czech Republic', formChine:'🇨🇳 China',
+    countryJapon: "🇯🇵 Japan", countryItalie: "🇮🇹 Italy", countryEtatsUnis: "🇺🇸 United States", countryAllemagne: "🇩🇪 Germany", countryRoyaumeUni: "🇬🇧 United Kingdom",
+    countryFrance: "🇫🇷 France", countryCoree: "🇰🇷 South Korea", countryAutre: "🌍 Other", countryAutriche: "🇦🇹 Austria", countrySuede: "🇸🇪 Sweden",
+    countryTchéquie: "🇨🇿 Czech Republic", countryChine: "🇨🇳 China",
     btnCancel:'Cancel', btnSave:'Save',
     catRoad:'Road', catRace:'Race',
     raritySpecial:'Used Cars', rarityLegend:'Legend Cars',
@@ -744,7 +744,7 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
       Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>{
-        const translationKey1 = 'form' + tr.replace('+', '');
+        const translationKey1 = 'form4RM';
         return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterAspiration('${tr}')">${t(translationKey1) || tr} <span class="count">${n}</span></button>`;
         }).join('');  }  
   makeTransHTML(''); makeTransHTML('m-');
@@ -795,9 +795,14 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
       Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>{
-        const translationKey2 = 'form' + cat.replace('+', '');
-        return `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterAspiration('${cat}')">${t(translationKey2) || cat} <span class="count">${n}</span></button>`;
-        }).join('');  }
+        let labelAffichage = cat;
+        if (cat === "Routière") {
+          labelAffichage = t('catRoad');
+        } else if (cat === "Course") {
+          labelAffichage = t('catRace');
+        }
+        return `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCategory('${cat}')">${labelAffichage} <span class="count">${n}</span></button>`;
+}).join('');
   makeCatHTML(''); makeCatHTML('m-');
 
   function makeCountryHTML(prefix) {
@@ -808,9 +813,13 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>{
-        const translationKey3 = 'form' + ct.replace('+', '');
-        return `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${t(translationKey3) || ct} <span class="count">${n}</span></button>`;
-        }).join('');  }
+        const cleanKey = "country" + ct
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+        .replace(/[^a-zA-Z0-9]/g, "");
+        const translationKey = mapKeys[ct] || cleanKey;
+        const labelPays = t(translationKey) || ct;
+        return `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${labelPays} <span class="count">${n}</span></button>`;
+}).join('');
   makeCountryHTML(''); makeCountryHTML('m-');
 
   const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
@@ -1088,4 +1097,4 @@ async function initApp() {
   initAuth();
 }
 
-initApp();
+initApp();}}
