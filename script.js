@@ -719,15 +719,15 @@ function renderFilters() {
 
   const aspirations={};
   cars.forEach(c=>{ if(c.aspiration) aspirations[c.aspiration]=(aspirations[c.aspiration]||0)+1; });
-  const aspirationLabels = { 'NA':'NA — Atmosphérique', 'TC':'TC — Turbo', 'SC':'SC — Compresseur', 'VE':'VE — Électrique', 'TC+SC':'TC+SC — Turbo + Compresseur' };
   function makeAspirationHTML(prefix) {
     const el = document.getElementById(prefix+'aspiration-filters');
     if (!el) return;
     el.innerHTML =
       `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp,n])=>
-        `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${aspirationLabels[asp]||asp} <span class="count">${n}</span></button>`).join('');
-  }
+      Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp,n])=>{
+        const translationKey = 'form' + asp.replace('+', '');
+        return `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${t(translationKey) || asp} <span class="count">${n}</span></button>`;
+        }).join('');  }
   makeAspirationHTML(''); makeAspirationHTML('m-');
 
   const transs={};
