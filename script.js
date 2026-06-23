@@ -709,7 +709,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'rarity-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity(null)">Tous <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(rarities).sort((a,b)=>b[1]-a[1]).map(([ra,n])=>{
         const rarityName = labels[ra] || ra;
         return `<button class="filter-btn ${activeRarity===ra?'active':''}" onclick="filterRarity('${ra}')">${rarityName} <span class="count">${n}</span></button>`;
@@ -724,7 +724,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'aspiration-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration(null)">Tous <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp,n])=>
         `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${aspirationLabels[asp]||asp} <span class="count">${n}</span></button>`).join('');
   }
@@ -736,7 +736,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'trans-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">Tous <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>
         `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`).join('');
   }
@@ -748,7 +748,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'year-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">Tous <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(years).sort((a,b)=>b[0]-a[0]).map(([ye,n])=>
         `<button class="filter-btn ${activeYear==ye?'active':''}" onclick="filterYear(${ye})">${ye}s <span class="count">${n}</span></button>`).join('');
   }
@@ -760,7 +760,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'pp-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">Tous <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(PPs).sort((a,b)=>b[0]-a[0]).map(([pp,n])=>
         `<button class="filter-btn ${activePP==pp?'active':''}" onclick="filterPP(${pp})">${pp} - ${parseInt(pp)+99} <span class="count">${n}</span></button>`).join('');
   }
@@ -771,7 +771,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'make-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeMake?'active':''}" data-make="">Toutes <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeMake?'active':''}" data-make="">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
       Object.entries(makes2).sort((a,b)=>a[0].localeCompare(b[0])).map(([mk,n])=>
         `<button class="filter-btn ${activeMake===mk?'active':''}" data-make="${mk.replace(/"/g,'&quot;')}">${mk} <span class="count">${n}</span></button>`).join('');
     el.querySelectorAll('[data-make]').forEach(btn => {
@@ -786,7 +786,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'cat-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">Toutes <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
       Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>
         `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${cat} <span class="count">${n}</span></button>`).join('');
   }
@@ -798,7 +798,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'country-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">Tous <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>
         `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${ct} <span class="count">${n}</span></button>`).join('');
   }
