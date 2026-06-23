@@ -356,14 +356,14 @@
 
   .legend-badge {
   position: absolute;
-  top: 40px; 
+  top: 50px; 
   left: 10px;
   
   background: rgba(0, 0, 0, 0.75);
   border: 1px solid var(--accent); 
   padding: 4px 8px;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.65rem;
   font-family: 'Barlow Condensed', sans-serif;
   z-index: 3; 
   pointer-events: none; 
