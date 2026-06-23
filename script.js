@@ -481,7 +481,6 @@ function getFiltered() {
   if (ownedFilter==='owned') list = list.filter(c => c.owned!==false);
   if (ownedFilter==='missing') list = list.filter(c => c.owned===false);
   if (ownedFilter==='wishlist') list = list.filter(c => c.wished===true);
-  if (ownedFilter==='legend') list = list.filter(c => c.rarity === 'legend');
   list.sort((a,b) => {
     if (sort==='name') return (a.make+a.name).localeCompare(b.make+b.name);
     if (sort==='make') return (a.make||'').localeCompare(b.make||'');
