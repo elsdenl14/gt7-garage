@@ -846,7 +846,7 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>       
-      `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${countryLabel(ct)} <span class="count">${n}</span>/button>`).join('');
+      `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${countryLabel(ct)} <span class="count">${n}</span></button>`).join('');
   }  makeCountryHTML(''); makeCountryHTML('m-');
 }
   const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
