@@ -41,6 +41,7 @@
   .wish-btn.wished { color: #f5a623; }
   .wish-banner { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(245,166,35,0.12); border-top: 1px solid rgba(245,166,35,0.25); font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #f5a623; text-align: center; padding: 3px 0; z-index: 3; display: none; }
   .wished-card .wish-banner { display: block; }
+  .legend-badge { position: absolute; top: 3.85rem; left: 0.6rem; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid rgba(232,200,64,0.75); background: rgba(10,10,12,0.78); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; line-height: 1; z-index: 4; box-shadow: 0 0 0 2px rgba(232,200,64,0.08); pointer-events: none; }
 
   /* LIST ROW WISHED */
   .list-row.wished-row { border-left: 2px solid rgba(245,166,35,0.5); }
@@ -276,6 +277,14 @@
       width: 20px; height: 20px;
       font-size: 0.62rem; border-width: 1px;
       border-radius: 50%;
+    }
+    .legend-badge {
+      top: 0.35rem;
+      left: 0.35rem;
+      width: 20px;
+      height: 20px;
+      font-size: 0.58rem;
+      border-width: 1px;
     }
     .wish-banner { display: none !important; }
 
