@@ -7,14 +7,10 @@ const LANGS = {
   fr: {
     // Header
     statOwned:'Obtenues', statCr:'Cr total', statPP:'PP max', statPower:'Puissance max', statWeight:'Poids max',
-    collection:'Collection GT7', progressOf:'/ 570 voitures', signout:'Déconnexion',
-
-    //connexion
-    authSubtitle:'Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.',
-    sendMagicLink:'Envoyer le lien de connexion',
+    collection:'Collection GT7', progressOf:'/ 570 voitures', btnAdd:'+ Ajouter',
     // Sidebar
     filterStatus:'Statut', filterAll:'Toutes', filterOwned:'✓ Obtenues', filterMissing:'○ Manquantes', filterWish:'⭐ Wishlist',
-    filterLegend:'🚗 Voitures de légende', filterSearch:'Recherche', searchPlaceholder:'Nom, marque…',
+    filterSearch:'Recherche', searchPlaceholder:'Nom, marque…',
     filterMake:'Marque', filterCat:'Catégorie', filterCountry:'Pays', filterRarity:'Rareté',
     filterAspiration:'Aspiration', filterTrans:'Transmission', filterYear:'Année',
     filterAllLabel:'Toutes', filterAllLabelM:'Tous',
@@ -30,8 +26,8 @@ const LANGS = {
     formTrans:'Transmission', formPower:'Puissance max (ch)', formWeight:'Poids (kg)',
     formAspiration:'Aspiration', formCat:'Catégorie', formRarity:'Rareté',
     formNote:'Note perso (optionnel)', formNotePh:'ex: Voiture préférée !',
-    formSelect:'— Sélectionner —', formOwned:'Voiture obtenue', formNA:'NA — Atmosphérique', formTC:'TC — Turbo', 
-    formSC:'SC — Compresseur', formVE:'VE — Électrique', formTCSC:'TC+SC — Turbo + Compresseur', form4RM:'4RM',    btnCancel:'Annuler', btnSave:'Enregistrer',
+    formSelect:'— Sélectionner —', formOwned:'Voiture obtenue',
+    btnCancel:'Annuler', btnSave:'Enregistrer',
     catRoad:'Routière', catRace:'Course',
     raritySpecial:"Voitures d'Occasion", rarityLegend:'Voitures de Légende',
     // Modal title
@@ -57,15 +53,10 @@ const LANGS = {
   en: {
     // Header
     statOwned:'Owned', statCr:'Total Cr', statPP:'Max PP', statPower:'Max Power', statWeight:'Max Weight',
-    collection:'GT7 Collection', progressOf:'/ 570 cars', signout:'Sign out',
-
-    // Connexion
-    authSubtitle:'Connect with your email address to access your garage.<br>A connection link will be sent to you.',
-    sendMagicLink:'Send connection link',
-
+    collection:'GT7 Collection', progressOf:'/ 570 cars', btnAdd:'+ Add',
     // Sidebar
     filterStatus:'Status', filterAll:'All', filterOwned:'✓ Owned', filterMissing:'○ Missing', filterWish:'⭐ Wishlist',
-    filterLegend:'🚗 Legend Cars', filterSearch:'Search', searchPlaceholder:'Name, brand…',
+    filterSearch:'Search', searchPlaceholder:'Name, brand…',
     filterMake:'Brand', filterCat:'Category', filterCountry:'Country', filterRarity:'Rarity',
     filterAspiration:'Aspiration', filterTrans:'Drivetrain', filterYear:'Year',
     filterAllLabel:'All', filterAllLabelM:'All',
@@ -81,8 +72,7 @@ const LANGS = {
     formTrans:'Drivetrain', formPower:'Max power (hp)', formWeight:'Weight (kg)',
     formAspiration:'Aspiration', formCat:'Category', formRarity:'Rarity',
     formNote:'Personal note (optional)', formNotePh:'e.g. My favourite car!',
-    formSelect:'— Select —', formOwned:'Car obtained', formNA:'NA — Naturally aspirated', formTC:'TC — Turbo', 
-    formSC:'SC — Supercharged', formVE:'VE — Electric', formTCSC:'TC+SC — Turbo + Supercharged', form4RM:'4WD',
+    formSelect:'— Select —', formOwned:'Car obtained',
     btnCancel:'Cancel', btnSave:'Save',
     catRoad:'Road', catRace:'Race',
     raritySpecial:'Used Cars', rarityLegend:'Legend Cars',
@@ -112,54 +102,6 @@ let currentLang = localStorage.getItem('gt7_lang') || 'fr';
 
 function t(key) { return LANGS[currentLang][key] || LANGS['fr'][key] || key; }
 
-const CATEGORY_LABELS = {
-  'Routière': { fr: 'Routière', en: 'Road car' },
-  'Course': { fr: 'Course', en: 'Race car' },
-  'Gr.1': { fr: 'Gr.1', en: 'Gr.1' },
-  'Gr.2': { fr: 'Gr.2', en: 'Gr.2' },
-  'Gr.3': { fr: 'Gr.3', en: 'Gr.3' },
-  'Gr.4': { fr: 'Gr.4', en: 'Gr.4' },
-  'Gr.B': { fr: 'Gr.B', en: 'Gr.B' },
-};
-
-const TRANS_LABELS = {
-  'FF': { fr: 'FF', en: 'FF' },
-  'FR': { fr: 'FR', en: 'FR' },
-  'MR': { fr: 'MR', en: 'MR' },
-  'RR': { fr: 'RR', en: 'RR' },
-  '4RM': { fr: '4RM', en: 'AWD' },
-};
-
-const COUNTRY_LABELS = {
-  '🇯🇵 Japon': { fr: '🇯🇵 Japon', en: '🇯🇵 Japan' },
-  '🇩🇪 Allemagne': { fr: '🇩🇪 Allemagne', en: '🇩🇪 Germany' },
-  '🇮🇹 Italie': { fr: '🇮🇹 Italie', en: '🇮🇹 Italy' },
-  '🇫🇷 France': { fr: '🇫🇷 France', en: '🇫🇷 France' },
-  '🇬🇧 Royaume-Uni': { fr: '🇬🇧 Royaume-Uni', en: '🇬🇧 United Kingdom' },
-  '🇺🇸 États-Unis': { fr: '🇺🇸 États-Unis', en: '🇺🇸 United States' },
-  '🇰🇷 Corée du Sud': { fr: '🇰🇷 Corée du Sud', en: '🇰🇷 South Korea' },
-  '🇦🇹 Autriche': { fr: '🇦🇹 Autriche', en: '🇦🇹 Austria' },
-  '🇸🇪 Suède': { fr: '🇸🇪 Suède', en: '🇸🇪 Sweden' },
-  '🇨🇳 Chine': { fr: '🇨🇳 Chine', en: '🇨🇳 China' },
-  '🇨🇿 République Tchèque': { fr: '🇨� République Tchèque', en: '🇨� Czech Republic' },
-};
-
-function labelFrom(map, value) {
-  return map[value]?.[currentLang] || value;
-}
-
-function catLabel(cat) {
-  return labelFrom(CATEGORY_LABELS, cat);
-}
-
-function transLabel(trans) {
-  return labelFrom(TRANS_LABELS, trans);
-}
-
-function countryLabel(country) {
-  return labelFrom(COUNTRY_LABELS, country);
-}
-
 function applyLang() {
   // Mettre à jour les boutons du sélecteur
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -168,22 +110,13 @@ function applyLang() {
   // Mettre à jour tous les éléments avec data-i18n
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (t(key)) {
-      // Si c'est le sous-titre d'authentification, on autorise le HTML pour le <br>
-      if (key === 'authSubtitle') {
-        el.innerHTML = t(key);
-      } else {
-        el.textContent = t(key);
-      }
-    }
+    if (t(key)) el.textContent = t(key);
   });
-
   // Mettre à jour les placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (t(key)) el.placeholder = t(key);
   });
-
   // Mettre à jour les options de select
   document.querySelectorAll('option[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -512,23 +445,19 @@ function filterOwned(mode) {
   const do_ = document.getElementById('filter-owned-btn');
   const dn = document.getElementById('filter-notowned-btn');
   const dw = document.getElementById('filter-wish-btn');
-  const dl = document.getElementById('filter-legend-btn');
   if(da) da.classList.toggle('active', mode==='all');
   if(do_) do_.classList.toggle('active', mode==='owned');
   if(dn) dn.classList.toggle('active', mode==='missing');
   if(dw) dw.classList.toggle('active', mode==='wishlist');
-  if(dl) dl.classList.toggle('active', mode==='legenda');
   // Mobile buttons
   const ma = document.getElementById('m-filter-all-btn');
   const mo = document.getElementById('m-filter-owned-btn');
   const mn = document.getElementById('m-filter-notowned-btn');
   const mw = document.getElementById('m-filter-wish-btn');
-  const ml = document.getElementById('m-filter-legend-btn');
   if(ma) ma.classList.toggle('active', mode==='all');
   if(mo) mo.classList.toggle('active', mode==='owned');
   if(mn) mn.classList.toggle('active', mode==='missing');
   if(mw) mw.classList.toggle('active', mode==='wishlist');
-  if(ml) ml.classList.toggle('active', mode==='legenda');
   render();
 }
 
@@ -548,7 +477,6 @@ function getFiltered() {
   if (ownedFilter==='owned') list = list.filter(c => c.owned!==false);
   if (ownedFilter==='missing') list = list.filter(c => c.owned===false);
   if (ownedFilter==='wishlist') list = list.filter(c => c.wished===true);
-  if (ownedFilter==='legenda') list = list.filter(c => isLegendCar(c));
   list.sort((a,b) => {
     if (sort==='name') return (a.make+a.name).localeCompare(b.make+b.name);
     if (sort==='make') return (a.make||'').localeCompare(b.make||'');
@@ -604,8 +532,9 @@ const MAKE_TO_COUNTRY = {
   'nissan':'🇯🇵 Japon','subaru':'🇯🇵 Japon','suzuki':'🇯🇵 Japon','toyota':'🇯🇵 Japon',
   'amuse':'🇯🇵 Japon','nismo':'🇯🇵 Japon','afeela':'🇯🇵 Japon','gran turismo':'🇯🇵 Japon','mine\'s':'🇯🇵 Japon',
   'audi':'🇩🇪 Allemagne','bmw':'🇩🇪 Allemagne','mercedes':'🇩🇪 Allemagne',
-  'opel':'🇩🇪 Allemagne','porsche':'🇩🇪 Allemagne','mercedes-benz': '🇩🇪 Allemagne',
-  'volkswagen':'🇩🇪 Allemagne','amg':'🇩🇪 Allemagne','mercedes benz': '🇩🇪 Allemagne',
+  'mercedes-benz':'🇩🇪 Allemagne','mercedes benz':'🇩🇪 Allemagne',
+  'opel':'🇩🇪 Allemagne','porsche':'🇩🇪 Allemagne',
+  'volkswagen':'🇩🇪 Allemagne','amg':'🇩🇪 Allemagne',
   'ruf':'🇩🇪 Allemagne',
   'alfa romeo':'🇮🇹 Italie','de tomaso':'🇮🇹 Italie',
   'ferrari':'🇮🇹 Italie','fiat':'🇮🇹 Italie','lamborghini':'🇮🇹 Italie',
@@ -671,7 +600,6 @@ function cardHTML(c) {
       <button class="wish-btn${isWished?' wished':''}" onclick="event.stopPropagation();toggleWish(${c.id})" title="${isWished?'Retirer de la wishlist':'Ajouter à la wishlist'}">${isWished?'⭐':'☆'}</button>
       <span class="car-rarity ${rc}">${rl}</span>
       <div class="wish-banner">⭐ Wishlist</div>
-      ${isLegendCar(c) ? '<span class="legend-badge">🚗</span>' : ''}
     </div>
     <div class="car-body">
       ${logoImgTag(c.make)}
@@ -714,9 +642,8 @@ function cardHTML(c) {
 function listHTML(c) {
   const isOwned = c.owned!==false;
   const isWished = c.wished===true;
-  const thumb = c.img
-    ? `<img src="${c.img}" alt="${c.name}" style="width:60px;height:40px;object-fit:cover;display:block;">`
-    : `<span style="font-size:1.6rem;">${c.emoji||'🚗'}</span>`;
+  const thumbSrc = c.img || `photos/${c.id}.jpg`;
+  const thumb = `<img src="${thumbSrc}" alt="${c.name}" style="width:60px;height:40px;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="font-size:1.6rem;display:none;">${c.emoji||'🚗'}</span>`;
   return `<div class="list-row${isOwned?'':' not-owned'}${isWished?' wished-row':''}">
     <div class="list-thumb">${thumb}</div>
     <div class="list-info">
@@ -756,7 +683,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'rarity-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeRarity?'active':''}" onclick="filterRarity(null)">Tous <span class="count">${cars.length}</span></button>`+
       Object.entries(rarities).sort((a,b)=>b[1]-a[1]).map(([ra,n])=>{
         const rarityName = labels[ra] || ra;
         return `<button class="filter-btn ${activeRarity===ra?'active':''}" onclick="filterRarity('${ra}')">${rarityName} <span class="count">${n}</span></button>`;
@@ -766,15 +693,15 @@ function renderFilters() {
 
   const aspirations={};
   cars.forEach(c=>{ if(c.aspiration) aspirations[c.aspiration]=(aspirations[c.aspiration]||0)+1; });
+  const aspirationLabels = { 'NA':'NA — Atmosphérique', 'TC':'TC — Turbo', 'SC':'SC — Compresseur', 'VE':'VE — Électrique', 'TC+SC':'TC+SC — Turbo + Compresseur' };
   function makeAspirationHTML(prefix) {
     const el = document.getElementById(prefix+'aspiration-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp,n])=>{
-        const translationKey = 'form' + asp.replace('+', '');
-        return `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${t(translationKey) || asp} <span class="count">${n}</span></button>`;
-        }).join('');  }
+      `<button class="filter-btn ${!activeAspiration?'active':''}" onclick="filterAspiration(null)">Tous <span class="count">${cars.length}</span></button>`+
+      Object.entries(aspirations).sort((a,b)=>b[1]-a[1]).map(([asp,n])=>
+        `<button class="filter-btn ${activeAspiration===asp?'active':''}" onclick="filterAspiration('${asp}')">${aspirationLabels[asp]||asp} <span class="count">${n}</span></button>`).join('');
+  }
   makeAspirationHTML(''); makeAspirationHTML('m-');
 
   const transs={};
@@ -783,11 +710,11 @@ function renderFilters() {
     const el = document.getElementById(prefix+'trans-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>{
-       return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${transLabel(tr)} <span class="count">${n}</span></button>`;
-        }).join('');  }  
-      makeTransHTML(''); makeTransHTML('m-');
+      `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">Tous <span class="count">${cars.length}</span></button>`+
+      Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>
+        `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`).join('');
+  }
+  makeTransHTML(''); makeTransHTML('m-');
 
   const years={};
   cars.forEach(c=>{ if(c.year){ const d=Math.floor(c.year/10)*10; years[d]=(years[d]||0)+1; }});
@@ -795,7 +722,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'year-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeYear?'active':''}" onclick="filterYear(null)">Tous <span class="count">${cars.length}</span></button>`+
       Object.entries(years).sort((a,b)=>b[0]-a[0]).map(([ye,n])=>
         `<button class="filter-btn ${activeYear==ye?'active':''}" onclick="filterYear(${ye})">${ye}s <span class="count">${n}</span></button>`).join('');
   }
@@ -807,7 +734,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'pp-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${activePP===null?'active':''}" onclick="filterPP(null)">Tous <span class="count">${cars.length}</span></button>`+
       Object.entries(PPs).sort((a,b)=>b[0]-a[0]).map(([pp,n])=>
         `<button class="filter-btn ${activePP==pp?'active':''}" onclick="filterPP(${pp})">${pp} - ${parseInt(pp)+99} <span class="count">${n}</span></button>`).join('');
   }
@@ -818,7 +745,7 @@ function renderFilters() {
     const el = document.getElementById(prefix+'make-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeMake?'active':''}" data-make="">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeMake?'active':''}" data-make="">Toutes <span class="count">${cars.length}</span></button>`+
       Object.entries(makes2).sort((a,b)=>a[0].localeCompare(b[0])).map(([mk,n])=>
         `<button class="filter-btn ${activeMake===mk?'active':''}" data-make="${mk.replace(/"/g,'&quot;')}">${mk} <span class="count">${n}</span></button>`).join('');
     el.querySelectorAll('[data-make]').forEach(btn => {
@@ -833,10 +760,11 @@ function renderFilters() {
     const el = document.getElementById(prefix+'cat-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
+      `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">Toutes <span class="count">${cars.length}</span></button>`+
       Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>
-        `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${catLabel(cat)} <span class="count">${n}</span></button>`).join('');
-  }  makeCatHTML(''); makeCatHTML('m-');
+        `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${cat} <span class="count">${n}</span></button>`).join('');
+  }
+  makeCatHTML(''); makeCatHTML('m-');
 
   function makeCountryHTML(prefix) {
     const countries={};
@@ -844,14 +772,15 @@ function renderFilters() {
     const el = document.getElementById(prefix+'country-filters');
     if (!el) return;
     el.innerHTML =
-      `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
-      Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>       
-      `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${countryLabel(ct)} <span class="count">${n}</span></button>`).join('');
-  }  makeCountryHTML(''); makeCountryHTML('m-');
-}
+      `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">Tous <span class="count">${cars.length}</span></button>`+
+      Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>
+        `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${ct} <span class="count">${n}</span></button>`).join('');
+  }
+  makeCountryHTML(''); makeCountryHTML('m-');
+
   const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
   document.getElementById('makes-list').innerHTML = makes.map(m=>`<option value="${m}">`).join('');
-
+}
 
 function filterCat(cat) { activeCategory=cat; render(); }
 function filterCountry(ct) { activeCountry=ct; render(); }
@@ -1105,11 +1034,6 @@ document.addEventListener('keydown', e => {
     if (e.key==='ArrowRight') modalNavigate(1);
   }
 });
-
-function isLegendCar(c) {
-  const LEGEND_CAR_IDS = [118,149,388,354,262,98,333,60];
-  return LEGEND_CAR_IDS.includes(c.id);
-}
 
 /* INIT */
 async function initApp() {
