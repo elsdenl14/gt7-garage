@@ -112,6 +112,54 @@ let currentLang = localStorage.getItem('gt7_lang') || 'fr';
 
 function t(key) { return LANGS[currentLang][key] || LANGS['fr'][key] || key; }
 
+const CATEGORY_LABELS = {
+  'Routière': { fr: 'Routière', en: 'Road car' },
+  'Course': { fr: 'Course', en: 'Race car' },
+  'Gr.1': { fr: 'Gr.1', en: 'Gr.1' },
+  'Gr.2': { fr: 'Gr.2', en: 'Gr.2' },
+  'Gr.3': { fr: 'Gr.3', en: 'Gr.3' },
+  'Gr.4': { fr: 'Gr.4', en: 'Gr.4' },
+  'Gr.B': { fr: 'Gr.B', en: 'Gr.B' },
+};
+
+const TRANS_LABELS = {
+  'FF': { fr: 'FF', en: 'FF' },
+  'FR': { fr: 'FR', en: 'FR' },
+  'MR': { fr: 'MR', en: 'MR' },
+  'RR': { fr: 'RR', en: 'RR' },
+  '4RM': { fr: '4RM', en: 'AWD' },
+};
+
+const COUNTRY_LABELS = {
+  '🇯🇵 Japon': { fr: '🇯🇵 Japon', en: '🇯🇵 Japan' },
+  '🇩🇪 Allemagne': { fr: '🇩🇪 Allemagne', en: '🇩🇪 Germany' },
+  '🇮🇹 Italie': { fr: '🇮🇹 Italie', en: '🇮🇹 Italy' },
+  '🇫🇷 France': { fr: '🇫🇷 France', en: '🇫🇷 France' },
+  '🇬🇧 Royaume-Uni': { fr: '🇬🇧 Royaume-Uni', en: '🇬🇧 United Kingdom' },
+  '🇺🇸 États-Unis': { fr: '🇺🇸 États-Unis', en: '🇺🇸 United States' },
+  '🇰🇷 Corée du Sud': { fr: '🇰🇷 Corée du Sud', en: '🇰🇷 South Korea' },
+  '🇦🇹 Autriche': { fr: '🇦🇹 Autriche', en: '🇦🇹 Austria' },
+  '🇸🇪 Suède': { fr: '🇸🇪 Suède', en: '🇸🇪 Sweden' },
+  '🇨🇳 Chine': { fr: '🇨🇳 Chine', en: '🇨🇳 China' },
+  '🇨🇿 République Tchèque': { fr: '🇨� République Tchèque', en: '🇨� Czech Republic' },
+};
+
+function labelFrom(map, value) {
+  return map[value]?.[currentLang] || value;
+}
+
+function catLabel(cat) {
+  return labelFrom(CATEGORY_LABELS, cat);
+}
+
+function transLabel(trans) {
+  return labelFrom(TRANS_LABELS, trans);
+}
+
+function countryLabel(country) {
+  return labelFrom(COUNTRY_LABELS, country);
+}
+
 function applyLang() {
   // Mettre à jour les boutons du sélecteur
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -556,8 +604,8 @@ const MAKE_TO_COUNTRY = {
   'nissan':'🇯🇵 Japon','subaru':'🇯🇵 Japon','suzuki':'🇯🇵 Japon','toyota':'🇯🇵 Japon',
   'amuse':'🇯🇵 Japon','nismo':'🇯🇵 Japon','afeela':'🇯🇵 Japon','gran turismo':'🇯🇵 Japon','mine\'s':'🇯🇵 Japon',
   'audi':'🇩🇪 Allemagne','bmw':'🇩🇪 Allemagne','mercedes':'🇩🇪 Allemagne',
-  'opel':'🇩🇪 Allemagne','porsche':'🇩🇪 Allemagne',
-  'volkswagen':'🇩🇪 Allemagne','amg':'🇩🇪 Allemagne',
+  'opel':'🇩🇪 Allemagne','porsche':'🇩🇪 Allemagne','mercedes-benz': '🇩🇪 Allemagne',
+  'volkswagen':'🇩🇪 Allemagne','amg':'🇩🇪 Allemagne','mercedes benz': '🇩🇪 Allemagne',
   'ruf':'🇩🇪 Allemagne',
   'alfa romeo':'🇮🇹 Italie','de tomaso':'🇮🇹 Italie',
   'ferrari':'🇮🇹 Italie','fiat':'🇮🇹 Italie','lamborghini':'🇮🇹 Italie',
@@ -737,7 +785,7 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeTrans?'active':''}" onclick="filterTrans(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
       Object.entries(transs).sort((a,b)=>b[1]-a[1]).map(([tr,n])=>{
-       return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${tr} <span class="count">${n}</span></button>`;
+       return `<button class="filter-btn ${activeTrans===tr?'active':''}" onclick="filterTrans('${tr}')">${transLabel(tr)} <span class="count">${n}</span></button>`;
         }).join('');  }  
       makeTransHTML(''); makeTransHTML('m-');
 
@@ -787,7 +835,7 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeCategory?'active':''}" onclick="filterCat(null)">${t('filterAllLabel')} <span class="count">${cars.length}</span></button>`+
       Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>
-        `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${cat} <span class="count">${n}</span></button>`).join('');
+        `<button class="filter-btn ${activeCategory===cat?'active':''}" onclick="filterCat('${cat}')">${catLabel(cat)} <span class="count">${n}</span></button>`).join('');
   }  makeCatHTML(''); makeCatHTML('m-');
 
   function makeCountryHTML(prefix) {
@@ -798,7 +846,7 @@ function renderFilters() {
     el.innerHTML =
       `<button class="filter-btn ${!activeCountry?'active':''}" onclick="filterCountry(null)">${t('filterAllLabelM')} <span class="count">${cars.length}</span></button>`+
       Object.entries(countries).sort((a,b)=>b[1]-a[1]).map(([ct,n])=>       
-      `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${ct} <span class="count">${n}</span></button>`).join('');
+      `<button class="filter-btn ${activeCountry===ct?'active':''}" onclick="filterCountry('${ct}')">${countryLabel(ct)} <span class="count">${n}</span>/button>`).join('');
   }  makeCountryHTML(''); makeCountryHTML('m-');
 }
   const makes=[...new Set(cars.map(c=>c.make).filter(Boolean))];
