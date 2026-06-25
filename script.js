@@ -1107,7 +1107,7 @@ document.addEventListener('keydown', e => {
 });
 
 function isLegendCar(c) {
-  const LEGEND_CAR_IDS = [149,15,19,328,354,262,333,184];
+  const LEGEND_CAR_IDS = [118,149,388,354,262,98,333,60];
   return LEGEND_CAR_IDS.includes(c.id);
 }
 
