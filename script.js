@@ -714,9 +714,8 @@ function cardHTML(c) {
 function listHTML(c) {
   const isOwned = c.owned!==false;
   const isWished = c.wished===true;
-  const thumb = c.img
-    ? `<img src="${c.img}" alt="${c.name}" style="width:60px;height:40px;object-fit:cover;display:block;">`
-    : `<span style="font-size:1.6rem;">${c.emoji||'🚗'}</span>`;
+  const thumbSrc = c.img || `photos/${c.id}.jpg`;
+  const thumb = `<img src="${thumbSrc}" alt="${c.name}" style="width:60px;height:40px;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="font-size:1.6rem;display:none;">${c.emoji||'🚗'}</span>`;
   return `<div class="list-row${isOwned?'':' not-owned'}${isWished?' wished-row':''}">
     <div class="list-thumb">${thumb}</div>
     <div class="list-info">
