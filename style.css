@@ -280,7 +280,8 @@
     }
     .legend-badge {
       top: 0.35rem;
-      left: 0.35rem;
+      left: auto;
+      right: 0.35rem;
       width: 20px;
       height: 20px;
       font-size: 0.58rem;
