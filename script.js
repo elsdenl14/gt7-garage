@@ -584,8 +584,9 @@ function render() {
   document.getElementById('max-ch').textContent = maxPower ? maxPower + " ch" : '—';
   const maxWeight = owned.length ? Math.max(...owned.map(c=>parseInt(c.weight)||0)) : 0;
   document.getElementById('max-kg').textContent = maxWeight ? maxWeight + " kg" : '—';
-  const total = getTotalGT7();
+  const total = cars.length;
   const pct = total ? Math.round(owned.length / total * 100) : 0;
+
   document.getElementById('progress-pct').textContent = pct + '%';
   document.getElementById('progress-fill').style.width = Math.min(100, pct) + '%';
   document.getElementById('progress-count').textContent = owned.length;
