@@ -7,7 +7,7 @@ const LANGS = {
   fr: {
     // Header
     statOwned:'Obtenues', statCr:'Cr total', statPP:'PP max', statPower:'Puissance max', statWeight:'Poids max',
-    collection:'Collection GT7', progressOf:'/ 570 voitures', signout:'Déconnexion',
+    collection:'Collection GT7', progressCars: 'voitures', signout:'Déconnexion',
 
     //connexion
     authSubtitle:'Connecte-toi avec ton adresse email pour accéder à ton garage.<br>Un lien de connexion te sera envoyé.',
@@ -57,7 +57,7 @@ const LANGS = {
   en: {
     // Header
     statOwned:'Owned', statCr:'Total Cr', statPP:'Max PP', statPower:'Max Power', statWeight:'Max Weight',
-    collection:'GT7 Collection', progressOf:'/ 570 cars', signout:'Sign out',
+    collection:'GT7 Collection', progressCars: 'cars', signout:'Sign out',
 
     // Connexion
     authSubtitle:'Connect with your email address to access your garage.<br>A connection link will be sent to you.',
@@ -113,8 +113,8 @@ let currentLang = localStorage.getItem('gt7_lang') || 'fr';
 function t(key) { return LANGS[currentLang][key] || LANGS['fr'][key] || key; }
 
 const CATEGORY_LABELS = {
-  'Routière': { fr: 'Routière', en: 'Road car' },
-  'Course': { fr: 'Course', en: 'Race car' },
+  'Routière': { fr: 'Routière', en: 'Road' },
+  'Course': { fr: 'Course', en: 'Race' },
   'Gr.1': { fr: 'Gr.1', en: 'Gr.1' },
   'Gr.2': { fr: 'Gr.2', en: 'Gr.2' },
   'Gr.3': { fr: 'Gr.3', en: 'Gr.3' },
@@ -370,7 +370,10 @@ let activeMake = null;
 let currentView = 'grid';
 let ownedFilter = 'all';
 let currentImgBase64 = null;
-const TOTAL_GT7 = 570;
+
+function getTotalGT7() {
+  return cars.length;
+}
 
 function showToast(msg, type='info') {
   let t = document.getElementById('toast');
@@ -581,10 +584,12 @@ function render() {
   document.getElementById('max-ch').textContent = maxPower ? maxPower + " ch" : '—';
   const maxWeight = owned.length ? Math.max(...owned.map(c=>parseInt(c.weight)||0)) : 0;
   document.getElementById('max-kg').textContent = maxWeight ? maxWeight + " kg" : '—';
-  const pct = Math.round(owned.length/TOTAL_GT7*100);
-  document.getElementById('progress-pct').textContent = pct+'%';
-  document.getElementById('progress-fill').style.width = Math.min(100,pct)+'%';
+  const total = getTotalGT7();
+  const pct = total ? Math.round(owned.length / total * 100) : 0;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = Math.min(100, pct) + '%';
   document.getElementById('progress-count').textContent = owned.length;
+  document.getElementById('progress-total').textContent = total;
   renderFilters();
   if (list.length===0) {
     container.innerHTML = `<div class="empty-state"><div class="big">🏎️</div><p>${cars.length>0?t('emptyFound'):t('emptyNone')}</p></div>`;
@@ -1106,7 +1111,7 @@ document.addEventListener('keydown', e => {
 });
 
 function isLegendCar(c) {
-  const LEGEND_CAR_IDS = [118,149,388,354,262,98,333,60];
+  const LEGEND_CAR_IDS = [118,235,149,420,418,390,354,262,98,60];
   return LEGEND_CAR_IDS.includes(c.id);
 }
 
